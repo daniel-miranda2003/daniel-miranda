@@ -1,0 +1,110 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/sections/Hero.astro';
+import About from '@/components/sections/About.astro';
+import Skills from '@/components/sections/Skills.astro';
+import Projects from '@/components/sections/Projects.astro';
+import Contact from '@/components/sections/Contact.astro';
+import Expertise from '@/components/sections/Expertise.astro';
+---
+<Layout title="Portfolio - Inicio">
+  <div class="min-h-screen bg-background">
+    <Header />
+    <main class="container mx-auto px-4 max-w-6xl">
+      <section id="inicio" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+        <Hero lang="es" />
+      </section>
+      
+      <section id="experiencia" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+          <Expertise lang="es" />
+      </section>
+      
+      <section id="sobre-mi" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+          <About lang="es" />
+      </section>
+      
+      <section id="habilidades" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+          <Skills lang="es" />
+      </section>
+      
+      <section id="proyectos" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+          <Projects lang="es" />
+      </section>
+      
+      <section id="contacto" data-animate="section" class="min-h-screen flex items-center justify-center py-2">
+          <Contact lang="es" />
+      </section>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -80px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-section');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('[data-animate="section"]').forEach((el) => {
+    observer.observe(el);
+  });
+</script>
+
+<style>
+  [data-animate="section"] {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-section {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  section[data-animate="section"]:nth-of-type(1) {
+    animation-delay: 0s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(2) {
+    animation-delay: 0.1s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(3) {
+    animation-delay: 0.2s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(4) {
+    animation-delay: 0.3s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(5) {
+    animation-delay: 0.4s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(6) {
+    animation-delay: 0.5s;
+  }
+
+  .animate-section {
+    will-change: opacity, transform;
+  }
+</style>

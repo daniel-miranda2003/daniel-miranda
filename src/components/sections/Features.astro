@@ -1,0 +1,40 @@
+---
+import Card from '@/components/Card.astro';
+import Icon from '@/components/Icon.astro';
+import type { Language } from '@/config/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+---
+
+<section id="proyectos" class="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
+  <Card 
+    title={lang === 'es' ? 'Rápido' : 'Fast'}
+    description={lang === 'es' ? 'Desarrolla con las últimas tecnologías y frameworks modernos' : 'Build with the latest technologies and modern frameworks'}
+    icon="rocket"
+    gradient="from-blue-500 to-cyan-500"
+  >
+    <Icon slot="icon" name="rocket" size="32" class="text-white" />
+  </Card>
+  
+  <Card 
+    title={lang === 'es' ? 'Moderno' : 'Modern'}
+    description={lang === 'es' ? 'Diseños atractivos, responsive y con experiencia de usuario excepcional' : 'Beautiful, responsive designs with exceptional user experience'}
+    icon="palette"
+    gradient="from-purple-500 to-pink-500"
+  >
+    <Icon slot="icon" name="palette" size="32" class="text-white" />
+  </Card>
+  
+  <Card 
+    title={lang === 'es' ? 'Optimizado' : 'Optimized'}
+    description={lang === 'es' ? 'Rendimiento excepcional y carga ultrarrápida en todos los dispositivos' : 'Exceptional performance and ultra-fast loading on all devices'}
+    icon="zap"
+    gradient="from-yellow-500 to-orange-500"
+  >
+    <Icon slot="icon" name="zap" size="32" class="text-white" />
+  </Card>
+</section>

@@ -1,0 +1,186 @@
+---
+---
+
+<div id="animatedBg" class="animated-background">
+  <canvas id="particleCanvas"></canvas>
+  <div class="bg-gradient"></div>
+</div>
+
+<style>
+  .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  #particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .bg-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.75) 0%, 
+      rgba(255, 255, 255, 0.80) 50%, 
+      rgba(240, 245, 255, 0.75) 100%);
+    animation: gradientShift 15s ease-in-out infinite;
+  }
+
+  :global(.dark) .bg-gradient {
+    background: linear-gradient(135deg,
+      rgba(15, 23, 42, 0.70) 0%,
+      rgba(15, 23, 42, 0.75) 50%,
+      rgba(30, 41, 59, 0.70) 100%);
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      opacity: 0.95;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  interface Particle {
+    x: number;
+    y: number;
+    size: number;
+    speedX: number;
+    speedY: number;
+    opacity: number;
+    color: string;
+  }
+
+  const canvas = document.getElementById('particleCanvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas context not found');
+
+  let particles: Particle[] = [];
+  const particleCount = 50;
+
+  const resizeCanvas = () => {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    ctx.scale(dpr, dpr);
+    
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    
+    createParticles();
+  };
+
+  const getColors = () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    return {
+      primary: isDark ? 'rgba(2, 132, 199, 0.5)' : 'rgba(2, 132, 199, 0.6)',
+      secondary: isDark ? 'rgba(230, 57, 70, 0.4)' : 'rgba(230, 57, 70, 0.5)',
+      accent: isDark ? 'rgba(14, 165, 233, 0.35)' : 'rgba(14, 165, 233, 0.45)',
+    };
+  };
+
+  const createParticles = () => {
+    const rect = canvas.getBoundingClientRect();
+    particles = [];
+    const colors = getColors();
+    const colorArray = [colors.primary, colors.secondary, colors.accent];
+    const isDark = document.documentElement.classList.contains('dark');
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * rect.width,
+        y: Math.random() * rect.height,
+        size: isDark ? Math.random() * 3 + 1.5 : Math.random() * 4 + 2,
+        speedX: (Math.random() - 0.5) * 0.6,
+        speedY: (Math.random() - 0.5) * 0.6,
+        opacity: isDark ? Math.random() * 0.5 + 0.25 : Math.random() * 0.6 + 0.3,
+        color: colorArray[Math.floor(Math.random() * colorArray.length)],
+      });
+    }
+  };
+
+  const drawParticles = () => {
+    const colors = getColors();
+    const rect = canvas.getBoundingClientRect();
+
+    particles.forEach((particle, index) => {
+      particle.x += particle.speedX;
+      particle.y += particle.speedY;
+
+      if (particle.x < 0 || particle.x > rect.width) particle.speedX *= -1;
+      if (particle.y < 0 || particle.y > rect.height) particle.speedY *= -1;
+
+      particle.x = Math.max(0, Math.min(rect.width, particle.x));
+      particle.y = Math.max(0, Math.min(rect.height, particle.y));
+
+      ctx.fillStyle = particle.color;
+      ctx.globalAlpha = particle.opacity;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      particles.forEach((otherParticle, otherIndex) => {
+        if (index < otherIndex) {
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const isDark = document.documentElement.classList.contains('dark');
+          if (distance < 150) {
+            ctx.strokeStyle = colors.primary;
+            ctx.globalAlpha = isDark ? (1 - distance / 150) * 0.25 : (1 - distance / 150) * 0.35;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.stroke();
+          }
+        }
+      });
+    });
+
+    ctx.globalAlpha = 1;
+  };
+
+  const animate = () => {
+    const rect = canvas.getBoundingClientRect();
+    ctx.fillStyle = document.documentElement.classList.contains('dark') 
+      ? 'rgba(15, 23, 42, 0.15)' 
+      : 'rgba(255, 255, 255, 0.15)';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    drawParticles();
+    requestAnimationFrame(animate);
+  };
+
+  resizeCanvas();
+  animate();
+
+  window.addEventListener('resize', resizeCanvas);
+
+  const observer = new MutationObserver(() => {
+    createParticles();
+  });
+  observer.observe(document.documentElement, { 
+    attributes: true, 
+    attributeFilter: ['class'] 
+  });
+</script>

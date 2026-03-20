@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import { generateThemeCSS } from '@/config/theme';
+import { getLangFromUrl } from '@/i18n/utils';
+import CustomCursor from '@/components/CustomCursor.astro';
+import AnimatedBackground from '@/components/AnimatedBackground.astro';
+import ScrollToTop from '@/components/ScrollToTop.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = 'Mi Portfolio', description = 'Portfolio personal' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const { lightVars, darkVars } = generateThemeCSS();
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>{title}</title>
+    <style is:global set:html={`
+      :root {
+        ${lightVars}
+      }
+      .dark {
+        ${darkVars}
+      }
+      body {
+        background-color: rgb(var(--color-background));
+        color: rgb(var(--color-foreground));
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+    `} />
+    <script is:inline>
+      (function() {
+        function getStoredTheme() {
+          try {
+            return localStorage.getItem('theme');
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function setStoredTheme(theme) {
+          try {
+            localStorage.setItem('theme', theme);
+          } catch (e) {
+            throw new Error(e);
+          }
+        }
+
+        const storedTheme = getStoredTheme();
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+        setStoredTheme(theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <AnimatedBackground />
+    <CustomCursor />
+    <ScrollToTop />
+    <slot />
+  </body>
+</html>

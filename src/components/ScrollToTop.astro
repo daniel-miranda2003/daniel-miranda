@@ -1,0 +1,119 @@
+---
+---
+<button
+  id="scroll-to-top"
+  class="fixed bottom-8 right-8 z-40 w-14 h-14 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 flex items-center justify-center"
+  style="background: linear-gradient(135deg, #0284c7, #38bdf8);"
+>
+  <svg class="w-6 h-6 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
+  </svg>
+</button>
+
+<script>
+  const scrollToTopBtn = document.getElementById('scroll-to-top');
+  const chevronIcon = scrollToTopBtn?.querySelector('.chevron-icon');
+  let ticking = false;
+
+  function updateScrollButton(currentScroll: number) {
+    if (currentScroll > 400) {
+      scrollToTopBtn?.classList.remove('opacity-0', 'invisible');
+      scrollToTopBtn?.classList.add('opacity-100', 'visible');
+    } else {
+      scrollToTopBtn?.classList.add('opacity-0', 'invisible');
+      scrollToTopBtn?.classList.remove('opacity-100', 'visible');
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateScrollButton(currentScroll);
+      });
+      ticking = true;
+    }
+  });
+
+  scrollToTopBtn?.addEventListener('click', () => {
+    chevronIcon?.classList.add('click-animate');
+    
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+    setTimeout(() => {
+      chevronIcon?.classList.remove('click-animate');
+    }, 600);
+  });
+</script>
+
+<style>
+  #scroll-to-top {
+    transform: scale(0.95);
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
+  }
+
+  #scroll-to-top:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 15px 35px rgba(2, 132, 199, 0.4);
+  }
+
+  #scroll-to-top:active {
+    transform: scale(1) translateY(0);
+    box-shadow: 0 5px 15px rgba(2, 132, 199, 0.2);
+  }
+
+  @keyframes clickBounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(-8px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+    75% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .chevron-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .chevron-icon.click-animate {
+    animation: clickBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  #scroll-to-top::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  #scroll-to-top:hover::before {
+    opacity: 0.3;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 0.5;
+    }
+  }
+</style>

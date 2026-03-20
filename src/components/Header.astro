@@ -1,0 +1,159 @@
+---
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import LanguageSwitcher from '@/components/LanguageSwitcher.astro';
+import { useTranslations, getCVPath } from '@/i18n/utils';
+import { getLangFromUrl } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const cvPath = getCVPath(lang);
+---
+
+<header id="header" class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md shadow-sm transition-transform duration-300">
+  <nav class="container mx-auto px-4 py-4 flex items-center justify-between max-w-6xl">
+    <img src="/favicon.svg" alt="Logo" class="w-8 h-8 transition-transform hover:scale-110" />
+    <ul class="hidden md:flex items-center gap-6">
+      <li><a href="#inicio" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.home')}</a></li>
+      <li><a href="#experiencia" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.expertise')}</a></li>
+      <li><a href="#sobre-mi" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.about')}</a></li>
+      <li><a href="#habilidades" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.skills')}</a></li>
+      <li><a href="#proyectos" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.projects')}</a></li>
+      <li><a href="#contacto" class="nav-link text-foreground/80 hover:text-foreground transition-colors">{t('nav.contact')}</a></li>
+    </ul>
+    <div class="flex items-center gap-3">
+      <div class="relative group">
+        <a 
+          href={cvPath}
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="hidden md:flex items-center justify-center p-2.5 rounded-lg bg-secondary-200 dark:bg-secondary-800 hover:bg-secondary-300 dark:hover:bg-secondary-700 transition-all duration-200"
+          aria-label={t('nav.cv')}
+        >
+          <svg 
+            class="w-5 h-5 text-foreground" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </a>
+        <span class="absolute right-0 top-full mt-2 px-3 py-1.5 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+          {t('nav.cv')}
+        </span>
+      </div>
+      <ThemeToggle />
+      <LanguageSwitcher />
+      <button id="mobile-menu-btn" class="md:hidden text-foreground">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden md:hidden bg-background/95 backdrop-blur-md border-t border-foreground/10">
+    <ul class="container mx-auto px-4 py-4 flex flex-col gap-3">
+      <li><a href="#inicio" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.home')}</a></li>
+      <li><a href="#experiencia" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.expertise')}</a></li>
+      <li><a href="#sobre-mi" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.about')}</a></li>
+      <li><a href="#habilidades" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.skills')}</a></li>
+      <li><a href="#proyectos" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.projects')}</a></li>
+      <li><a href="#contacto" class="nav-link block py-2 text-foreground/80 hover:text-foreground transition-colors">{t('nav.contact')}</a></li>
+      <li>
+        <a 
+          href={cvPath}
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex items-center gap-2 py-2 px-4 rounded-lg font-semibold bg-secondary-200 dark:bg-secondary-800 text-foreground hover:bg-secondary-300 dark:hover:bg-secondary-700 transition-colors"
+        >
+          <svg 
+            class="w-5 h-5" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          {t('nav.cv')}
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('header');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  let lastScroll = 0;
+  let ticking = false;
+
+  function updateHeader(currentScroll: number) {
+    if (currentScroll > lastScroll && currentScroll > 100) {
+      header?.classList.add('-translate-y-full');
+    } else {
+      header?.classList.remove('-translate-y-full');
+    }
+
+    lastScroll = currentScroll;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateHeader(currentScroll);
+      });
+      ticking = true;
+    }
+  });
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.substring(1);
+      const targetElement = document.getElementById(targetId || '');
+      
+      if (targetElement) {
+        const headerOffset = 100;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        mobileMenu?.classList.add('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: rgb(var(--color-primary-600));
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+</style>

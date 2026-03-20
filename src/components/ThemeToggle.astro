@@ -1,0 +1,97 @@
+---
+---
+<button
+  id="themeToggle"
+  type="button"
+  class="relative p-2.5 rounded-lg bg-secondary-200 dark:bg-secondary-800 hover:bg-secondary-300 dark:hover:bg-secondary-700 transition-all duration-200"
+  aria-label="Cambiar tema"
+>
+  <svg 
+    class="sun w-5 h-5 text-yellow-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    fill="none" 
+    stroke="currentColor" 
+    viewBox="0 0 24 24"
+  >
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  
+  <svg 
+    class="moon w-5 h-5 text-indigo-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    fill="none" 
+    stroke="currentColor" 
+    viewBox="0 0 24 24"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<script>
+  function initThemeToggle() {
+    const button = document.getElementById('themeToggle');
+    
+    if (!button) {
+      return;
+    }
+
+    const sun = button.querySelector('.sun');
+    const moon = button.querySelector('.moon');
+    
+    if (!sun || !moon) {
+      return;
+    }
+
+    const sunEl = sun as SVGElement;
+    const moonEl = moon as SVGElement;
+
+    function updateIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        sunEl.style.display = 'none';
+        moonEl.style.display = 'block';
+      } else {
+        sunEl.style.display = 'block';
+        moonEl.style.display = 'none';
+      }
+    }
+
+    function setTheme(theme: 'light' | 'dark') {
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (e) {
+        // localStorage not available
+      }
+    }
+
+    updateIcons();
+
+    button.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      
+      if (isDark) {
+        html.classList.remove('dark');
+        setTheme('light');
+      } else {
+        html.classList.add('dark');
+        setTheme('dark');
+      }
+      updateIcons();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+
+  document.addEventListener('astro:page-load', initThemeToggle);
+</script>

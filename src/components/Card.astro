@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: 'rocket' | 'palette' | 'zap' | 'code' | 'star' | 'heart';
+  gradient?: string;
+}
+
+const { 
+  title, 
+  description, 
+  icon,
+  gradient = 'from-primary-500 to-primary-600'
+} = Astro.props;
+---
+
+<div class="group relative p-8 bg-linear-to-br from-background to-muted hover:from-muted hover:to-secondary-100 dark:hover:to-secondary-800 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-slate-200 dark:border-slate-700/30">
+  <div class={`inline-flex p-4 rounded-xl bg-linear-to-br ${gradient} text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+    <slot name="icon" />
+  </div>
+  
+  <h3 class="text-2xl font-bold mb-3 text-foreground group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+    {title}
+  </h3>
+  
+  <p class="text-secondary-600 dark:text-secondary-400 leading-relaxed">
+    {description}
+  </p>
+  
+  <div class="absolute inset-0 rounded-2xl bg-linear-to-br from-primary-500/0 to-primary-600/0 group-hover:from-primary-500/5 group-hover:to-primary-600/5 transition-all duration-300 pointer-events-none"></div>
+</div>

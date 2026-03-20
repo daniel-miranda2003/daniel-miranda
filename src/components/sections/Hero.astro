@@ -1,0 +1,167 @@
+---
+import Button from '@/components/Button.astro';
+import { useTranslations } from '@/i18n/utils';
+import type { Language } from '@/config/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="text-center">
+  <p class="text-primary-600 dark:text-primary-400 font-medium mb-4 text-lg animate-fade-in">
+    {t('hero.greeting')}
+  </p>
+  
+  <div class="mb-6">
+    <h2 class="text-5xl md:text-7xl font-bold text-primary-900 dark:text-primary-100">
+      <span id="typing-name" class="text-primary-900 dark:text-primary-100"></span>
+      <span class="typing-cursor">|</span>
+    </h2>
+  </div>
+  
+  <p class="text-2xl md:text-3xl text-secondary-600 dark:text-secondary-400 mb-8 font-medium animate-fade-in-delay-1">
+    {t('hero.subtitle')}
+  </p>
+  
+  <p class="text-lg text-secondary-700 dark:text-secondary-300 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
+    {t('hero.description')}
+  </p>
+
+  <div class="flex gap-4 justify-center flex-wrap animate-fade-in-delay-3">
+    <a href="#proyectos" class="hero-scroll-link">
+      <Button variant="primary" size="lg">
+        {t('hero.cta')}
+      </Button>
+    </a>
+    <a href="#contacto" class="hero-scroll-link">
+      <Button variant="outline" size="lg">
+        {t('hero.contact')}
+      </Button>
+    </a>
+  </div>
+</section>
+
+<script>
+  // Typing animation
+  const name = "Daniel Miranda";
+  const typingElement = document.getElementById('typing-name');
+  let charIndex = 0;
+
+  function typeWriter() {
+    if (charIndex < name.length) {
+      if (typingElement) {
+        typingElement.textContent += name.charAt(charIndex);
+      }
+      charIndex++;
+      const speed = Math.random() * 100 + 80;
+      setTimeout(typeWriter, speed);
+    } else {
+      setTimeout(() => {
+        const cursor = document.querySelector('.typing-cursor');
+        if (cursor) {
+          cursor.classList.add('cursor-stop');
+        }
+      }, 500);
+    }
+  }
+
+  setTimeout(typeWriter, 800);
+  document.addEventListener('DOMContentLoaded', () => {
+    const heroScrollLinks = document.querySelectorAll('.hero-scroll-link');
+    
+    heroScrollLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href')?.substring(1);
+        const targetElement = document.getElementById(targetId || '');
+        
+        if (targetElement) {
+          const headerOffset = 100;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes blink {
+    0%, 49% {
+      opacity: 1;
+    }
+    50%, 100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-1 {
+    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    animation-delay: 2.5s;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    animation-delay: 3s;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-3 {
+    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    animation-delay: 3.5s;
+    opacity: 0;
+  }
+
+  .typing-cursor {
+    animation: blink 1s step-end infinite;
+    color: currentColor;
+    font-weight: 100;
+  }
+
+  .typing-cursor.cursor-stop {
+    animation: none;
+    opacity: 0;
+  }
+
+  h2 {
+    line-height: 1.2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 2rem;
+      gap: 0.15rem;
+    }
+  }
+</style>
