@@ -34,6 +34,6 @@ export function translatePath(path: string, targetLang: Language): string {
 
 export function getCVPath(lang: Language): string {
   return lang === "en"
-    ? "/cv/CVen - Daniel Miranda.pdf"
-    : "/cv/CVes - Daniel Miranda.pdf";
+    ? "/cv/CV Daniel Miranda - English.pdf"
+    : "/cv/CV Daniel Miranda - Español.pdf";
 }

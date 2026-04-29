@@ -18,9 +18,9 @@ export const translations = {
     "nav.skills": "Habilidades",
 
     "hero.greeting": "¡Hola! Soy",
-    "hero.subtitle": "Desarrollador Web y Móvil",
+    "hero.subtitle": "Desarrollador Full Stack & Mobile",
     "hero.description":
-      "Desarrollador web y móvil con enfoque en soluciones digitales completas. Desarrollo aplicaciones modernas y eficientes, priorizando rendimiento, escalabilidad y una sólida experiencia de usuario.",
+      "Especializado en Flutter, Next.js y NestJS. Construyo apps móviles y APIs escalables que resuelven problemas reales.",
     "hero.cta": "Proyectos",
     "hero.contact": "Contáctame",
 
@@ -31,7 +31,7 @@ export const translations = {
     "about.specialty":
       "Me especializo en desarrollo móvil con Flutter, creando aplicaciones multiplataforma con interfaces modernas y experiencias fluidas. Dominio tanto el diseño UI/UX como la arquitectura técnica para entregar aplicaciones robustas y escalables.",
     "about.fullstack":
-      "También cuento con experiencia en desarrollo web full-stack, trabajando con tecnologías modernas como React, Vue.js, Astro y Node.js para el frontend, y Laravel, Express y bases de datos SQL/NoSQL para el backend.",
+      "También cuento con experiencia en desarrollo full stack moderno, trabajando con React, Astro, Next.js, Node.js y NestJS para construir productos web escalables con arquitectura modular.",
 
     "projects.title": "Proyectos",
     "projects.subtitle": "Algunos de mis trabajos recientes",
@@ -77,10 +77,14 @@ export const translations = {
     "expertise.solution3": "Integración con APIs REST",
     "expertise.backend": "Backend",
     "expertise.backendDescription":
-      "APIs REST con Node.js, Express y Laravel. Bases de datos y autenticación segura.",
+      "APIs REST escalables con Node.js y NestJS. Arquitectura modular, seguridad y buenas prácticas.",
     "expertise.frontend": "Frontend",
     "expertise.frontendDescription":
-      "React, Vue.js y Astro. Interfaces modernas y responsive con TailwindCSS/BS5.",
+      "React, Astro y Next.js para interfaces modernas, SSR/SSG y alto rendimiento.",
+    "expertise.fullstack": "Full Stack Moderno",
+    "expertise.fullstackDescription":
+      "Next.js para frontends con SSR/SSG de alto rendimiento. NestJS para APIs REST escalables con arquitectura modular.",
+    "expertise.fullstackTags": "Next.js,NestJS,TypeScript,REST APIs",
   },
   en: {
     "nav.home": "Home",
@@ -92,9 +96,9 @@ export const translations = {
     "nav.skills": "Skills",
 
     "hero.greeting": "Hi! I am",
-    "hero.subtitle": "Web & Mobile Developer",
+    "hero.subtitle": "Full Stack & Mobile Developer",
     "hero.description":
-      "Web and mobile developer focused on complete digital solutions. I build modern and efficient applications, prioritizing performance, scalability, and a solid user experience.",
+      "Specialized in Flutter, Next.js, and NestJS. I build mobile apps and scalable APIs that solve real problems.",
     "hero.cta": "Projects",
     "hero.contact": "Contact me",
 
@@ -105,7 +109,7 @@ export const translations = {
     "about.specialty":
       "I specialize in mobile development with Flutter, building cross-platform applications with modern interfaces and smooth experiences. I master both UI/UX design and technical architecture to deliver robust and scalable applications.",
     "about.fullstack":
-      "I also have experience in full-stack web development, working with modern technologies like React, Vue.js, Astro, and Node.js for the frontend, and Laravel, Express, and SQL/NoSQL databases for the backend.",
+      "I also have experience in modern full-stack development, working with React, Astro, Next.js, Node.js, and NestJS to build scalable web products with modular architecture.",
 
     "projects.title": "Projects",
     "projects.subtitle": "Some of my recent work",
@@ -151,9 +155,13 @@ export const translations = {
     "expertise.solution3": "REST API Integration",
     "expertise.backend": "Backend",
     "expertise.backendDescription":
-      "REST APIs with Node.js, Express & Laravel. Databases and secure authentication.",
+      "Scalable REST APIs with Node.js and NestJS. Modular architecture, security, and best practices.",
     "expertise.frontend": "Frontend",
     "expertise.frontendDescription":
-      "React, Vue.js & Astro. Modern and responsive interfaces with TailwindCSS.",
+      "React, Astro, and Next.js for modern interfaces, SSR/SSG, and high performance.",
+    "expertise.fullstack": "Modern Full Stack",
+    "expertise.fullstackDescription":
+      "Next.js for high-performance SSR/SSG frontends. NestJS for scalable REST APIs with modular architecture.",
+    "expertise.fullstackTags": "Next.js,NestJS,TypeScript,REST APIs",
   },
 } as const;

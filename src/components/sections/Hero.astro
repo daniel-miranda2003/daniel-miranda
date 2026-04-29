@@ -19,13 +19,14 @@ const t = useTranslations(lang);
   <div class="mb-6">
     <h2 class="text-5xl md:text-7xl font-bold text-primary-900 dark:text-primary-100">
       <span id="typing-name" class="text-primary-900 dark:text-primary-100"></span>
+      <span
+        id="typing-role"
+        class="typing-role text-secondary-600 dark:text-secondary-400"
+        data-role={t('hero.subtitle')}
+      ></span>
       <span class="typing-cursor">|</span>
     </h2>
   </div>
-  
-  <p class="text-2xl md:text-3xl text-secondary-600 dark:text-secondary-400 mb-8 font-medium animate-fade-in-delay-1">
-    {t('hero.subtitle')}
-  </p>
   
   <p class="text-lg text-secondary-700 dark:text-secondary-300 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
     {t('hero.description')}
@@ -48,17 +49,37 @@ const t = useTranslations(lang);
 <script>
   // Typing animation
   const name = "Daniel Miranda";
-  const typingElement = document.getElementById('typing-name');
-  let charIndex = 0;
+  const nameElement = document.getElementById('typing-name');
+  const roleElement = document.getElementById('typing-role');
+  const role = roleElement?.getAttribute('data-role') || '';
+  let nameIndex = 0;
+  let roleIndex = 0;
 
-  function typeWriter() {
-    if (charIndex < name.length) {
-      if (typingElement) {
-        typingElement.textContent += name.charAt(charIndex);
+  function typeName() {
+    if (nameIndex < name.length) {
+      if (nameElement) {
+        nameElement.textContent += name.charAt(nameIndex);
       }
-      charIndex++;
+      nameIndex++;
       const speed = Math.random() * 100 + 80;
-      setTimeout(typeWriter, speed);
+      setTimeout(typeName, speed);
+      return;
+    }
+
+    if (roleElement) {
+      roleElement.classList.add('is-visible');
+    }
+    setTimeout(typeRole, 200);
+  }
+
+  function typeRole() {
+    if (roleIndex < role.length) {
+      if (roleElement) {
+        roleElement.textContent += role.charAt(roleIndex);
+      }
+      roleIndex++;
+      const speed = Math.random() * 50 + 45;
+      setTimeout(typeRole, speed);
     } else {
       setTimeout(() => {
         const cursor = document.querySelector('.typing-cursor');
@@ -69,7 +90,7 @@ const t = useTranslations(lang);
     }
   }
 
-  setTimeout(typeWriter, 800);
+  setTimeout(typeName, 800);
   document.addEventListener('DOMContentLoaded', () => {
     const heroScrollLinks = document.querySelectorAll('.hero-scroll-link');
     
@@ -152,10 +173,21 @@ const t = useTranslations(lang);
   h2 {
     line-height: 1.2;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.4rem;
+  }
+
+  .typing-role {
+    min-height: 1.2em;
+    font-size: 0.42em;
+    font-weight: 600;
+    opacity: 0;
+  }
+
+  .typing-role.is-visible {
+    opacity: 1;
   }
 
   @media (max-width: 768px) {
