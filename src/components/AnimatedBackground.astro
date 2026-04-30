@@ -3,7 +3,9 @@
 
 <div id="animatedBg" class="animated-background">
   <canvas id="particleCanvas"></canvas>
-  <div class="bg-gradient"></div>
+  <div class="bg-gradient bg-gradient--base"></div>
+  <div class="bg-gradient bg-gradient--sky" aria-hidden="true"></div>
+  <div class="bg-mesh" aria-hidden="true"></div>
 </div>
 
 <style>
@@ -32,26 +34,101 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.75) 0%, 
-      rgba(255, 255, 255, 0.80) 50%, 
-      rgba(240, 245, 255, 0.75) 100%);
-    animation: gradientShift 15s ease-in-out infinite;
+    pointer-events: none;
   }
 
-  :global(.dark) .bg-gradient {
-    background: linear-gradient(135deg,
-      rgba(15, 23, 42, 0.70) 0%,
-      rgba(15, 23, 42, 0.75) 50%,
-      rgba(30, 41, 59, 0.70) 100%);
+  .bg-gradient--base {
+    background: linear-gradient(
+      125deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(224, 242, 254, 0.45) 42%,
+      rgba(255, 255, 255, 0.78) 100%
+    );
+    animation: gradientShift 18s ease-in-out infinite;
+  }
+
+  :global(.dark) .bg-gradient--base {
+    background: linear-gradient(
+      125deg,
+      rgba(15, 23, 42, 0.58) 0%,
+      rgba(30, 41, 59, 0.52) 45%,
+      rgba(15, 23, 42, 0.58) 100%
+    );
+  }
+
+  .bg-gradient--sky {
+    mix-blend-mode: multiply;
+    opacity: 0.45;
+    background: linear-gradient(
+      210deg,
+      rgba(56, 189, 248, 0.1) 0%,
+      transparent 40%,
+      rgba(14, 165, 233, 0.08) 70%,
+      rgba(125, 211, 252, 0.06) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientDrift 22s ease-in-out infinite;
+  }
+
+  :global(.dark) .bg-gradient--sky {
+    mix-blend-mode: normal;
+    opacity: 0.18;
+    background: linear-gradient(
+      210deg,
+      rgba(56, 189, 248, 0.1) 0%,
+      transparent 45%,
+      rgba(14, 165, 233, 0.08) 100%
+    );
+    background-size: 200% 200%;
+  }
+
+  .bg-mesh {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(14, 165, 233, 0.12), transparent 50%),
+      radial-gradient(ellipse 70% 45% at 100% 30%, rgba(2, 132, 199, 0.1), transparent 45%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(125, 211, 252, 0.08), transparent 40%);
+    animation: meshPulse 28s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  :global(.dark) .bg-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 0%, rgba(56, 189, 248, 0.06), transparent 50%),
+      radial-gradient(ellipse 70% 45% at 95% 25%, rgba(14, 165, 233, 0.05), transparent 45%),
+      radial-gradient(ellipse 55% 35% at 55% 95%, rgba(125, 211, 252, 0.04), transparent 42%);
   }
 
   @keyframes gradientShift {
-    0%, 100% {
-      opacity: 0.95;
+    0%,
+    100% {
+      opacity: 0.92;
     }
     50% {
       opacity: 1;
+    }
+  }
+
+  @keyframes gradientDrift {
+    0%,
+    100% {
+      background-position: 0% 30%;
+    }
+    50% {
+      background-position: 100% 70%;
+    }
+  }
+
+  @keyframes meshPulse {
+    0%,
+    100% {
+      opacity: 0.88;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.01);
     }
   }
 </style>
@@ -72,29 +149,26 @@
   if (!ctx) throw new Error('Canvas context not found');
 
   let particles: Particle[] = [];
-  const particleCount = 50;
+  const particleCount = 42;
 
   const resizeCanvas = () => {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    
+    canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+    canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
-    
     canvas.style.width = rect.width + 'px';
     canvas.style.height = rect.height + 'px';
-    
     createParticles();
   };
 
   const getColors = () => {
     const isDark = document.documentElement.classList.contains('dark');
     return {
-      primary: isDark ? 'rgba(2, 132, 199, 0.5)' : 'rgba(2, 132, 199, 0.6)',
-      secondary: isDark ? 'rgba(230, 57, 70, 0.4)' : 'rgba(230, 57, 70, 0.5)',
-      accent: isDark ? 'rgba(14, 165, 233, 0.35)' : 'rgba(14, 165, 233, 0.45)',
+      primary: isDark ? 'rgba(56, 189, 248, 0.85)' : 'rgba(2, 132, 199, 0.55)',
+      secondary: isDark ? 'rgba(125, 211, 252, 0.65)' : 'rgba(230, 57, 70, 0.45)',
+      accent: isDark ? 'rgba(14, 165, 233, 0.75)' : 'rgba(14, 165, 233, 0.45)',
     };
   };
 
@@ -109,10 +183,10 @@
       particles.push({
         x: Math.random() * rect.width,
         y: Math.random() * rect.height,
-        size: isDark ? Math.random() * 3 + 1.5 : Math.random() * 4 + 2,
-        speedX: (Math.random() - 0.5) * 0.6,
-        speedY: (Math.random() - 0.5) * 0.6,
-        opacity: isDark ? Math.random() * 0.5 + 0.25 : Math.random() * 0.6 + 0.3,
+        size: isDark ? Math.random() * 2.8 + 1.5 : Math.random() * 3 + 1.8,
+        speedX: (Math.random() - 0.5) * 0.45,
+        speedY: (Math.random() - 0.5) * 0.45,
+        opacity: isDark ? Math.random() * 0.35 + 0.38 : Math.random() * 0.45 + 0.25,
         color: colorArray[Math.floor(Math.random() * colorArray.length)],
       });
     }
@@ -121,6 +195,9 @@
   const drawParticles = () => {
     const colors = getColors();
     const rect = canvas.getBoundingClientRect();
+    const isDark = document.documentElement.classList.contains('dark');
+    const linkDist = isDark ? 125 : 140;
+    const linkAlphaMul = isDark ? 0.14 : 0.22;
 
     particles.forEach((particle, index) => {
       particle.x += particle.speedX;
@@ -143,11 +220,10 @@
           const dx = particle.x - otherParticle.x;
           const dy = particle.y - otherParticle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const isDark = document.documentElement.classList.contains('dark');
-          if (distance < 150) {
+          if (distance < linkDist) {
             ctx.strokeStyle = colors.primary;
-            ctx.globalAlpha = isDark ? (1 - distance / 150) * 0.25 : (1 - distance / 150) * 0.35;
-            ctx.lineWidth = 0.8;
+            ctx.globalAlpha = (1 - distance / linkDist) * linkAlphaMul;
+            ctx.lineWidth = isDark ? 0.55 : 0.7;
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
@@ -162,10 +238,12 @@
 
   const animate = () => {
     const rect = canvas.getBoundingClientRect();
-    ctx.fillStyle = document.documentElement.classList.contains('dark') 
-      ? 'rgba(15, 23, 42, 0.15)' 
-      : 'rgba(255, 255, 255, 0.15)';
-    ctx.fillRect(0, 0, rect.width, rect.height);
+    const w = rect.width;
+    const h = rect.height;
+    const isDark = document.documentElement.classList.contains('dark');
+    ctx.fillStyle = isDark ? 'rgb(15, 23, 42)' : 'rgb(255, 255, 255)';
+    ctx.globalAlpha = 1;
+    ctx.fillRect(0, 0, w, h);
 
     drawParticles();
     requestAnimationFrame(animate);
@@ -179,8 +257,8 @@
   const observer = new MutationObserver(() => {
     createParticles();
   });
-  observer.observe(document.documentElement, { 
-    attributes: true, 
-    attributeFilter: ['class'] 
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
   });
 </script>

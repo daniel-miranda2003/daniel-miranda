@@ -11,11 +11,11 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="text-center">
+<section class="text-center px-2">
   <p class="text-primary-600 dark:text-primary-400 font-medium mb-4 text-lg animate-fade-in">
     {t('hero.greeting')}
   </p>
-  
+
   <div class="mb-6">
     <h2 class="text-5xl md:text-7xl font-bold text-primary-900 dark:text-primary-100">
       <span id="typing-name" class="text-primary-900 dark:text-primary-100"></span>
@@ -27,7 +27,7 @@ const t = useTranslations(lang);
       <span class="typing-cursor">|</span>
     </h2>
   </div>
-  
+
   <p class="text-lg text-secondary-700 dark:text-secondary-300 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
     {t('hero.description')}
   </p>
@@ -47,72 +47,105 @@ const t = useTranslations(lang);
 </section>
 
 <script>
-  // Typing animation
-  const name = "Daniel Miranda";
-  const nameElement = document.getElementById('typing-name');
-  const roleElement = document.getElementById('typing-role');
-  const role = roleElement?.getAttribute('data-role') || '';
-  let nameIndex = 0;
-  let roleIndex = 0;
+  let heroRunId = 0;
+  const pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
+  let scrollAbort: AbortController | null = null;
 
-  function typeName() {
-    if (nameIndex < name.length) {
-      if (nameElement) {
+  function clearHeroTimers() {
+    while (pendingTimeouts.length) {
+      const id = pendingTimeouts.pop();
+      if (id !== undefined) clearTimeout(id);
+    }
+  }
+
+  function schedule(ms: number, fn: () => void, run: number) {
+    const id = setTimeout(() => {
+      if (run !== heroRunId) return;
+      fn();
+    }, ms);
+    pendingTimeouts.push(id);
+  }
+
+  function initHeroTyping() {
+    heroRunId++;
+    const run = heroRunId;
+    clearHeroTimers();
+
+    const nameElement = document.getElementById('typing-name');
+    const roleElement = document.getElementById('typing-role');
+    const cursor = document.querySelector('.typing-cursor');
+
+    if (!nameElement || !roleElement) return;
+
+    nameElement.textContent = '';
+    roleElement.textContent = '';
+    roleElement.classList.remove('is-visible');
+    cursor?.classList.remove('cursor-stop');
+
+    const name = 'Daniel Miranda';
+    const role = roleElement.getAttribute('data-role') || '';
+
+    let nameIndex = 0;
+    let roleIndex = 0;
+
+    function typeName() {
+      if (run !== heroRunId) return;
+      if (nameIndex < name.length) {
         nameElement.textContent += name.charAt(nameIndex);
+        nameIndex++;
+        schedule(Math.random() * 100 + 80, typeName, run);
+        return;
       }
-      nameIndex++;
-      const speed = Math.random() * 100 + 80;
-      setTimeout(typeName, speed);
-      return;
-    }
-
-    if (roleElement) {
       roleElement.classList.add('is-visible');
+      schedule(200, typeRole, run);
     }
-    setTimeout(typeRole, 200);
-  }
 
-  function typeRole() {
-    if (roleIndex < role.length) {
-      if (roleElement) {
+    function typeRole() {
+      if (run !== heroRunId) return;
+      if (roleIndex < role.length) {
         roleElement.textContent += role.charAt(roleIndex);
+        roleIndex++;
+        schedule(Math.random() * 50 + 45, typeRole, run);
+      } else {
+        schedule(500, () => {
+          if (run !== heroRunId) return;
+          cursor?.classList.add('cursor-stop');
+        }, run);
       }
-      roleIndex++;
-      const speed = Math.random() * 50 + 45;
-      setTimeout(typeRole, speed);
-    } else {
-      setTimeout(() => {
-        const cursor = document.querySelector('.typing-cursor');
-        if (cursor) {
-          cursor.classList.add('cursor-stop');
-        }
-      }, 500);
     }
+
+    schedule(400, typeName, run);
   }
 
-  setTimeout(typeName, 800);
-  document.addEventListener('DOMContentLoaded', () => {
-    const heroScrollLinks = document.querySelectorAll('.hero-scroll-link');
-    
-    heroScrollLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href')?.substring(1);
-        const targetElement = document.getElementById(targetId || '');
-        
-        if (targetElement) {
-          const headerOffset = 100;
-          const elementPosition = targetElement.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  function initHeroScroll() {
+    scrollAbort?.abort();
+    scrollAbort = new AbortController();
+    const signal = scrollAbort.signal;
 
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      });
+    document.querySelectorAll('.hero-scroll-link').forEach((link) => {
+      link.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          const href = link.getAttribute('href')?.substring(1);
+          const target = document.getElementById(href || '');
+          if (target) {
+            const headerOffset = 100;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        },
+        { signal }
+      );
     });
-  });
+  }
+
+  function initHero() {
+    initHeroTyping();
+    initHeroScroll();
+  }
+
+  document.addEventListener('astro:page-load', initHero);
 </script>
 
 <style>
@@ -128,10 +161,12 @@ const t = useTranslations(lang);
   }
 
   @keyframes blink {
-    0%, 49% {
+    0%,
+    49% {
       opacity: 1;
     }
-    50%, 100% {
+    50%,
+    100% {
       opacity: 0;
     }
   }
@@ -141,21 +176,15 @@ const t = useTranslations(lang);
     opacity: 0;
   }
 
-  .animate-fade-in-delay-1 {
-    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    animation-delay: 2.5s;
-    opacity: 0;
-  }
-
   .animate-fade-in-delay-2 {
     animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    animation-delay: 3s;
+    animation-delay: 2.8s;
     opacity: 0;
   }
 
   .animate-fade-in-delay-3 {
     animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    animation-delay: 3.5s;
+    animation-delay: 3.3s;
     opacity: 0;
   }
 

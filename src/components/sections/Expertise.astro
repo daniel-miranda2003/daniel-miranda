@@ -1,7 +1,6 @@
 ---
 import { useTranslations } from '@/i18n/utils';
 import type { Language } from '@/config/i18n';
-import { Image } from 'astro:assets';
 
 interface Props {
   lang: Language;
@@ -11,7 +10,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section id="expertise">
+<section id="experiencia">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
       <h2 class="text-5xl md:text-6xl font-black mb-6 text-foreground">
@@ -20,20 +19,20 @@ const t = useTranslations(lang);
     </div>
     <div class="space-y-6">
       <div class="group">
-        <div class="relative overflow-hidden rounded-3xl border border-violet-200/80 dark:border-violet-700/40 bg-linear-to-br from-violet-50 via-white to-indigo-50 dark:from-violet-950/40 dark:via-slate-900 dark:to-indigo-950/30 p-8 md:p-10 shadow-lg hover:shadow-2xl transition-all duration-300">
-          <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-violet-500/15 blur-3xl"></div>
-          <div class="absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
+        <div class="relative overflow-hidden rounded-3xl border border-indigo-400/30 dark:border-indigo-400/20 bg-linear-to-br from-indigo-500/[0.09] via-violet-500/[0.06] to-fuchsia-500/[0.07] dark:from-indigo-500/[0.14] dark:via-violet-600/[0.1] dark:to-fuchsia-600/[0.08] p-8 md:p-10 shadow-lg shadow-indigo-500/10 dark:shadow-indigo-950/30 hover:border-indigo-400/45 dark:hover:border-indigo-400/30 transition-all duration-300">
+          <div class="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full bg-indigo-400/20 dark:bg-indigo-500/15 blur-3xl motion-safe:animate-pulse motion-safe:duration-[4s]"></div>
+          <div class="pointer-events-none absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-fuchsia-400/15 dark:bg-fuchsia-500/12 blur-3xl motion-safe:animate-pulse motion-safe:duration-[5s]"></div>
           <div class="relative z-10 max-w-4xl space-y-5">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-violet-700 dark:text-violet-300">Focus Area</p>
-            <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-indigo-600 dark:text-indigo-400">{t('expertise.focusLabel')}</p>
+            <h3 class="text-4xl md:text-5xl font-black text-foreground">
               {t('expertise.fullstack')}
             </h3>
-            <p class="text-base md:text-lg leading-relaxed text-slate-700 dark:text-slate-200">
+            <p class="text-base md:text-lg leading-relaxed text-muted-foreground">
               {t('expertise.fullstackDescription')}
             </p>
             <div class="flex flex-wrap gap-2 pt-1">
               {t('expertise.fullstackTags').split(',').map((tag) => (
-                <span class="text-xs px-3 py-1.5 rounded-full bg-white/90 dark:bg-violet-900/40 border border-violet-200/80 dark:border-violet-700/50 text-violet-700 dark:text-violet-200 font-semibold">
+                <span class="text-xs px-3 py-1.5 rounded-md font-semibold bg-background/90 dark:bg-white/[0.07] text-foreground border border-indigo-200/60 dark:border-indigo-400/25 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                   {tag}
                 </span>
               ))}
@@ -42,40 +41,31 @@ const t = useTranslations(lang);
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="group">
-          <div class="relative h-full bg-linear-to-br from-background to-muted dark:from-background dark:to-secondary-950/50 border border-primary-300/60 dark:border-primary-800/40 rounded-3xl p-7 hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <div class="absolute top-0 right-0 w-36 h-36 bg-primary-500/10 rounded-full blur-2xl -z-10"></div>
-            <div class="flex items-center gap-3 mb-4">
-              <div class="inline-flex p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30 shrink-0">
-                <Image
-                  src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg"
-                  alt="Flutter logo"
-                  width={24}
-                  height={24}
-                  class="w-6 h-6"
-                  loading="lazy"
-                />
-              </div>
-              <h3 class="text-xl font-bold text-primary-700 dark:text-primary-300">{t('expertise.flutter')}</h3>
-            </div>
-            <p class="text-sm text-secondary-600 dark:text-secondary-400 leading-relaxed">{t('expertise.flutterDescription')}</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:items-stretch">
+        <div class="group flex">
+          <div class="relative flex flex-col flex-1 rounded-3xl border border-sky-400/40 dark:border-sky-500/30 bg-linear-to-b from-sky-500/[0.1] to-background dark:from-sky-400/[0.12] p-7 pt-8 shadow-md shadow-sky-500/10 hover:shadow-lg hover:border-sky-500/50 dark:hover:border-sky-400/40 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+            <div class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-sky-500/0 via-sky-500/70 to-sky-500/0 opacity-90"></div>
+            <div class="absolute top-8 right-6 w-28 h-28 bg-sky-400/15 dark:bg-sky-500/15 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.flutter')}</h3>
+            <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.flutterDescription')}</p>
           </div>
         </div>
 
-        <div class="group">
-          <div class="relative h-full bg-linear-to-br from-background to-muted dark:from-background dark:to-secondary-950/50 border border-emerald-300/60 dark:border-emerald-800/40 rounded-3xl p-7 hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <div class="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl -z-10"></div>
-            <h3 class="text-xl font-bold text-emerald-700 dark:text-emerald-300 mb-3">{t('expertise.backend')}</h3>
-            <p class="text-sm text-secondary-600 dark:text-secondary-400 leading-relaxed">{t('expertise.backendDescription')}</p>
+        <div class="group flex">
+          <div class="relative flex flex-col flex-1 rounded-3xl border border-emerald-400/35 dark:border-emerald-600/25 bg-linear-to-b from-emerald-500/[0.06] to-background p-7 pt-8 shadow-md shadow-emerald-500/5 hover:shadow-lg hover:border-emerald-500/45 dark:hover:border-emerald-500/35 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+            <div class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-80"></div>
+            <div class="absolute top-8 right-6 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.backend')}</h3>
+            <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.backendDescription')}</p>
           </div>
         </div>
 
-        <div class="group">
-          <div class="relative h-full bg-linear-to-br from-background to-muted dark:from-background dark:to-secondary-950/50 border border-blue-300/60 dark:border-blue-800/40 rounded-3xl p-7 hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <div class="absolute top-0 right-0 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl -z-10"></div>
-            <h3 class="text-xl font-bold text-blue-700 dark:text-blue-300 mb-3">{t('expertise.frontend')}</h3>
-            <p class="text-sm text-secondary-600 dark:text-secondary-400 leading-relaxed">{t('expertise.frontendDescription')}</p>
+        <div class="group flex">
+          <div class="relative flex flex-col flex-1 rounded-3xl border border-primary-400/35 dark:border-primary-600/25 bg-linear-to-b from-primary-500/[0.07] to-background p-7 pt-8 shadow-md shadow-primary-500/10 hover:shadow-lg hover:border-primary-500/45 dark:hover:border-primary-500/35 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+            <div class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-primary-500/0 via-primary-500/60 to-primary-500/0 opacity-80"></div>
+            <div class="absolute top-8 right-6 w-28 h-28 bg-primary-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.frontend')}</h3>
+            <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.frontendDescription')}</p>
           </div>
         </div>
       </div>

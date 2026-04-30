@@ -1,5 +1,58 @@
 @import "tailwindcss";
 
+.vt-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.vt-progress--active {
+  opacity: 1;
+}
+
+.vt-progress-bar {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, #bae6fd, #38bdf8, #0ea5e9, #7dd3fc);
+  background-size: 200% 100%;
+  animation: vt-shimmer 1.2s linear infinite;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vt-progress--active .vt-progress-bar {
+  transform: scaleX(0.72);
+  animation: vt-shimmer 0.9s linear infinite;
+}
+
+.vt-progress--done .vt-progress-bar {
+  transform: scaleX(1);
+  animation: none;
+  transition-duration: 0.22s;
+}
+
+@keyframes vt-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-progress-bar {
+    animation: none !important;
+  }
+}
+
 @layer base {
   html {
     --font-sans: "Inter", system-ui, -apple-system, sans-serif;

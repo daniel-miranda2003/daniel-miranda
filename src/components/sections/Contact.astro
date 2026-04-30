@@ -25,7 +25,6 @@ const t = useTranslations(lang);
     </p>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-      <!-- Email -->
       <div class="p-8 md:p-12 bg-background rounded-2xl border border-slate-200 dark:border-slate-700/30 hover:shadow-xl transition-shadow duration-300">
         <p class="text-sm font-semibold text-secondary-600 dark:text-secondary-400 mb-4 uppercase tracking-wide">
           {lang === 'es' ? 'Correo Electrónico' : 'Email'}
@@ -50,22 +49,10 @@ const t = useTranslations(lang);
           href="https://wa.me/59175875587"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center justify-center gap-3 text-lg md:text-xl font-bold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors hover:underline"
+          class="text-lg md:text-xl font-bold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors hover:underline"
           aria-label={lang === 'es' ? 'Contactar por WhatsApp al +591 75875587' : 'Contact via WhatsApp at +591 75875587'}
         >
-          <svg 
-            class="w-8 h-6 rounded" 
-            viewBox="0 0 900 600" 
-            xmlns="http://www.w3.org/2000/svg"
-            role="img"
-            aria-label="Bandera de Bolivia"
-          >
-            <title>Bandera de Bolivia</title>
-            <rect width="900" height="200" fill="#CE1126"/>
-            <rect y="200" width="900" height="200" fill="#FFCD00"/>
-            <rect y="400" width="900" height="200" fill="#007A5E"/>
-          </svg>
-          <span>(+591) 75875587</span>
+          (+591) 75875587
         </a>
         <p class="text-xs text-secondary-500 dark:text-secondary-500 mt-2">
           {lang === 'es' ? 'Enviar por WhatsApp' : 'Send via WhatsApp'}

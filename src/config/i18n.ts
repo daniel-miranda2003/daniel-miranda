@@ -16,6 +16,7 @@ export const translations = {
     "nav.cv": "Ver CV",
     "nav.expertise": "Experiencia",
     "nav.skills": "Habilidades",
+    "nav.drawerPrefs": "Tema e idioma",
 
     "hero.greeting": "¡Hola! Soy",
     "hero.subtitle": "Desarrollador Full Stack & Mobile",
@@ -25,13 +26,13 @@ export const translations = {
     "hero.contact": "Contáctame",
 
     "about.title": "Sobre mí",
-    "about.subtitle": "Conoce más sobre mi trayectoria",
+    "about.subtitle": "Ingeniero de sistemas · La Paz, Bolivia",
     "about.intro":
-      "Soy Daniel Miranda, tengo 22 años y soy de Latinoamérica. Recién egresado de la Licenciatura en Ingeniería de Sistemas, me apasiona crear soluciones digitales que combinen funcionalidad, rendimiento y experiencia de usuario excepcional.",
-    "about.specialty":
-      "Me especializo en desarrollo móvil con Flutter, creando aplicaciones multiplataforma con interfaces modernas y experiencias fluidas. Dominio tanto el diseño UI/UX como la arquitectura técnica para entregar aplicaciones robustas y escalables.",
-    "about.fullstack":
-      "También cuento con experiencia en desarrollo full stack moderno, trabajando con React, Astro, Next.js, Node.js y NestJS para construir productos web escalables con arquitectura modular.",
+      "Construyo productos móviles con Flutter y plataformas web con Next.js, NestJS y TypeScript. Priorizo arquitectura clara, rendimiento y interfaces que se sienten bien al usarlas.",
+    "about.photoAlt": "Daniel Miranda",
+    "about.pillar1": "Mobile con Flutter para Android e iOS desde un solo código.",
+    "about.pillar2": "APIs y servicios con NestJS y Node.js, listos para escalar.",
+    "about.pillar3": "Interfaces con React, Astro y Next.js cuando el proyecto lo pide.",
 
     "projects.title": "Proyectos",
     "projects.subtitle": "Algunos de mis trabajos recientes",
@@ -48,6 +49,7 @@ export const translations = {
     "contact.send": "Enviar mensaje",
 
     "footer.rights": "Todos los derechos reservados.",
+    "footer.copyrightLine": "Daniel Miranda · 2026 · Todos los derechos reservados.",
     "footer.madeWith": "Hecho con",
 
     "theme.light": "Modo claro",
@@ -67,6 +69,7 @@ export const translations = {
     "skills.tools": "Herramientas",
 
     "expertise.title": "En qué me especializo",
+    "expertise.focusLabel": "Enfoque",
     "expertise.flutter": "Flutter Dev",
     "expertise.mainSpecialty": "Especialidad Principal",
     "expertise.flutterDescription":
@@ -94,6 +97,7 @@ export const translations = {
     "nav.cv": "View Resume",
     "nav.expertise": "Expertise",
     "nav.skills": "Skills",
+    "nav.drawerPrefs": "Theme & language",
 
     "hero.greeting": "Hi! I am",
     "hero.subtitle": "Full Stack & Mobile Developer",
@@ -103,13 +107,13 @@ export const translations = {
     "hero.contact": "Contact me",
 
     "about.title": "About me",
-    "about.subtitle": "Get to know my journey",
+    "about.subtitle": "Systems engineer · La Paz, Bolivia",
     "about.intro":
-      "I'm Daniel Miranda, 22 years old from Latin America. Recent graduate with a Bachelor's degree in Systems Engineering, passionate about creating digital solutions that combine functionality, performance, and exceptional user experience.",
-    "about.specialty":
-      "I specialize in mobile development with Flutter, building cross-platform applications with modern interfaces and smooth experiences. I master both UI/UX design and technical architecture to deliver robust and scalable applications.",
-    "about.fullstack":
-      "I also have experience in modern full-stack development, working with React, Astro, Next.js, Node.js, and NestJS to build scalable web products with modular architecture.",
+      "I ship Flutter mobile apps and web platforms with Next.js, NestJS, and TypeScript. I care about clean architecture, performance, and interfaces that feel great to use.",
+    "about.photoAlt": "Daniel Miranda",
+    "about.pillar1": "Mobile with Flutter for Android and iOS from one codebase.",
+    "about.pillar2": "APIs and services with NestJS and Node.js, built to scale.",
+    "about.pillar3": "Front ends with React, Astro, and Next.js when the project calls for it.",
 
     "projects.title": "Projects",
     "projects.subtitle": "Some of my recent work",
@@ -126,6 +130,7 @@ export const translations = {
     "contact.send": "Send message",
 
     "footer.rights": "All rights reserved.",
+    "footer.copyrightLine": "Daniel Miranda · 2026 · All rights reserved.",
     "footer.madeWith": "Made with",
 
     "theme.light": "Light mode",
@@ -145,6 +150,7 @@ export const translations = {
     "skills.tools": "Tools",
 
     "expertise.title": "My Expertise",
+    "expertise.focusLabel": "Focus",
     "expertise.flutter": "Flutter Dev",
     "expertise.mainSpecialty": "Main Specialty",
     "expertise.flutterDescription":

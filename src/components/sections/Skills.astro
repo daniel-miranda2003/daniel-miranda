@@ -15,15 +15,15 @@ const skills = {
   frontend: [
     { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', color: 'from-cyan-400 to-blue-500' },
     { name: 'Astro', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/astro/astro-original.svg', color: 'from-purple-500 to-pink-500' },
-    { name: 'Next.js', icon: nextJsIcon, color: 'from-slate-700 to-black' }
+    { name: 'Next.js', icon: nextJsIcon, color: 'from-slate-700 to-black' },
   ],
   backend: [
     { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', color: 'from-green-600 to-green-800' },
-    { name: 'NestJS', icon: nestJsIcon, color: 'from-rose-600 to-red-700' }
+    { name: 'NestJS', icon: nestJsIcon, color: 'from-rose-600 to-red-700' },
   ],
   mobile: [
     { name: 'Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg', color: 'from-blue-400 to-cyan-500' },
-    { name: 'Kotlin', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg', color: 'from-purple-500 to-violet-600' }
+    { name: 'Kotlin', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg', color: 'from-purple-500 to-violet-600' },
   ],
   database: [
     { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg', color: 'from-blue-600 to-blue-800' },
@@ -34,8 +34,8 @@ const skills = {
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', color: 'from-orange-600 to-red-600' },
     { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg', color: 'from-blue-500 to-blue-700' },
     { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg', color: 'from-yellow-500 to-gray-800' },
-    { name: 'Postman', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg', color: 'from-orange-500 to-orange-700' }
-  ]
+    { name: 'Postman', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg', color: 'from-orange-500 to-orange-700' },
+  ],
 };
 
 const categories = [
@@ -43,13 +43,13 @@ const categories = [
   { key: 'backend', label: t('skills.backend') },
   { key: 'mobile', label: t('skills.mobile') },
   { key: 'database', label: t('skills.databases') },
-  { key: 'tools', label: t('skills.tools') }
+  { key: 'tools', label: t('skills.tools') },
 ];
 ---
 
 <section class="text-center">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16">
+    <div class="text-center mb-12 md:mb-14">
       <h2 class="text-5xl md:text-6xl font-black mb-6 text-foreground">
         {t('skills.title')}
       </h2>
@@ -59,14 +59,13 @@ const categories = [
     </div>
 
     <div class="skills-tabs">
-      <div class="flex flex-wrap justify-center gap-3 mb-8">
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 md:mb-10" role="tablist">
         {categories.map((category, index) => (
           <button
-            class={`tab-button px-6 py-3 rounded-lg font-semibold transition-all duration-300 border ${
-              index === 0 
-                ? 'active' 
-                : 'bg-linear-to-br from-background to-muted hover:from-muted hover:to-secondary-100 dark:hover:to-secondary-800 text-foreground border-slate-200 dark:border-slate-700/30'
-            }`}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            class:list={['tab-button px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 border', index === 0 ? 'tab-button-active' : 'tab-button-idle']}
             data-tab={category.key}
           >
             {category.label}
@@ -77,44 +76,43 @@ const categories = [
       <div class="tabs-content">
         {categories.map((category, index) => {
           const categorySkills = skills[category.key as keyof typeof skills];
-          
+
           return (
             <div
-              class={`tab-panel ${index === 0 ? 'active' : 'hidden'}`}
+              class:list={['tab-panel', index === 0 ? '' : 'hidden']}
+              role="tabpanel"
               data-panel={category.key}
+              hidden={index !== 0}
             >
-              <div class="relative p-8 bg-linear-to-br from-background to-muted rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/30">
-                <div class="flex flex-wrap justify-center gap-4">
-                  {categorySkills.map((skill) => (
-                    <div class="group/item relative w-[160px] sm:w-[170px] p-6 bg-linear-to-br from-background to-muted hover:from-muted hover:to-secondary-100 dark:hover:to-secondary-800 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg border border-slate-200 dark:border-slate-700/30">
-                      <div class={`absolute inset-0 rounded-xl bg-linear-to-br ${skill.color} opacity-0 group-hover/item:opacity-5 transition-opacity duration-300 pointer-events-none`}></div>
-                      
-                      <div class="flex flex-col items-center gap-3 relative">
-                        <div class={`w-12 h-12 flex items-center justify-center rounded-lg ${
-                          ['Next.js', 'Astro'].includes(skill.name) 
-                            ? 'bg-white dark:bg-slate-800 p-1' 
-                            : ''
-                        }`}>
-                          <Image 
-                            src={skill.icon} 
-                            alt={`${skill.name} logo`}
-                            width={48}
-                            height={48}
-                            class={`w-full h-full object-contain transition-transform duration-300 group-hover/item:scale-110 ${
-                              ['Next.js', 'Astro'].includes(skill.name) 
-                                ? 'dark:invert' 
-                                : ''
-                            }`}
-                            loading="lazy"
-                          />
-                        </div>
-                        <span class="text-sm font-semibold text-foreground text-center transition-colors duration-300 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
-                          {skill.name}
-                        </span>
+              <div class="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-5xl mx-auto">
+                {categorySkills.map((skill) => (
+                  <div class="group/item relative w-[148px] sm:w-[158px] p-5 sm:p-6 bg-linear-to-br from-background to-muted/80 hover:to-muted rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-lg border border-border">
+                    <div class={`absolute inset-0 rounded-xl bg-linear-to-br ${skill.color} opacity-0 group-hover/item:opacity-[0.07] dark:group-hover/item:opacity-[0.12] transition-opacity duration-300 pointer-events-none`} />
+                    <div class="flex flex-col items-center gap-3 relative">
+                      <div
+                        class:list={[
+                          'w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg',
+                          ['Next.js', 'Astro'].includes(skill.name) ? 'bg-white dark:bg-slate-800 p-1' : '',
+                        ]}
+                      >
+                        <Image
+                          src={skill.icon}
+                          alt={`${skill.name} logo`}
+                          width={48}
+                          height={48}
+                          class:list={[
+                            'w-full h-full object-contain transition-transform duration-300 group-hover/item:scale-110',
+                            ['Next.js', 'Astro'].includes(skill.name) ? 'dark:invert' : '',
+                          ]}
+                          loading="lazy"
+                        />
                       </div>
+                      <span class="text-sm font-semibold text-foreground text-center transition-colors duration-300 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
+                        {skill.name}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           );
@@ -125,53 +123,90 @@ const categories = [
 </section>
 
 <script>
+  let skillsAbort: AbortController | null = null;
+
   function initSkillsTabs() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabPanels = document.querySelectorAll('.tab-panel');
+    skillsAbort?.abort();
+    skillsAbort = new AbortController();
+    const signal = skillsAbort.signal;
 
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const targetTab = button.getAttribute('data-tab');
+    const tabButtons = document.querySelectorAll<HTMLButtonElement>('.tab-button');
+    const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
-        tabButtons.forEach(btn => {
-          btn.classList.remove('active');
-          btn.classList.add('bg-gradient-to-br', 'from-background', 'to-muted', 'hover:from-muted', 'hover:to-secondary-100', 'dark:hover:to-secondary-800', 'text-foreground', 'border-slate-200', 'dark:border-slate-700/30');
-        });
+    tabButtons.forEach((button) => {
+      button.addEventListener(
+        'click',
+        () => {
+          const targetTab = button.getAttribute('data-tab');
+          if (!targetTab) return;
 
-        button.classList.remove('bg-gradient-to-br', 'from-background', 'to-muted', 'hover:from-muted', 'hover:to-secondary-100', 'dark:hover:to-secondary-800', 'text-foreground', 'border-slate-200', 'dark:border-slate-700/30');
-        button.classList.add('active');
+          tabButtons.forEach((btn) => {
+            btn.classList.remove('tab-button-active');
+            btn.classList.add('tab-button-idle');
+            btn.setAttribute('aria-selected', 'false');
+          });
+          button.classList.remove('tab-button-idle');
+          button.classList.add('tab-button-active');
+          button.setAttribute('aria-selected', 'true');
 
-        tabPanels.forEach(panel => {
-          if (panel.getAttribute('data-panel') === targetTab) {
-            panel.classList.remove('hidden');
-            panel.classList.add('active');
-          } else {
-            panel.classList.add('hidden');
-            panel.classList.remove('active');
-          }
-        });
-      });
+          tabPanels.forEach((panel) => {
+            const match = panel.getAttribute('data-panel') === targetTab;
+            panel.classList.toggle('hidden', !match);
+            panel.hidden = !match;
+          });
+        },
+        { signal }
+      );
     });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSkillsTabs);
-  } else {
-    initSkillsTabs();
   }
 
   document.addEventListener('astro:page-load', initSkillsTabs);
 </script>
 
 <style>
-  .tab-panel {
-    animation: fadeIn 0.3s ease-in-out;
+  .tab-button-active {
+    border-color: #0ea5e9;
+    background-color: #0284c7;
+    color: #fff;
+    box-shadow: 0 4px 14px rgb(2 132 199 / 0.28);
   }
 
-  @keyframes fadeIn {
+  :global(.dark) .tab-button-active {
+    background-color: #0ea5e9;
+    border-color: #38bdf8;
+    box-shadow: 0 4px 14px rgb(14 165 233 / 0.25);
+  }
+
+  .tab-button-idle {
+    border-color: rgb(226 232 240);
+    background-color: rgb(var(--color-background, 255 255 255));
+    color: rgb(var(--color-foreground, 17 24 39));
+  }
+
+  .tab-button-idle:hover {
+    border-color: rgb(14 165 233 / 0.45);
+    background-color: rgb(243 244 246 / 0.95);
+  }
+
+  :global(.dark) .tab-button-idle {
+    border-color: rgb(51 65 85 / 0.55);
+    background-color: rgb(var(--color-background, 17 24 39));
+    color: rgb(var(--color-foreground, 243 244 246));
+  }
+
+  :global(.dark) .tab-button-idle:hover {
+    border-color: rgb(56 189 248 / 0.4);
+    background-color: rgb(31 41 55 / 0.85);
+  }
+
+  .tab-panel {
+    animation: skillsPanelIn 0.35s ease-out;
+  }
+
+  @keyframes skillsPanelIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(8px);
     }
     to {
       opacity: 1;

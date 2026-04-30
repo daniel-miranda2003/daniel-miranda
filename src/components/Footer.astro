@@ -1,0 +1,22 @@
+---
+import { useTranslations } from '@/i18n/utils';
+import type { Language } from '@/config/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="border-t border-border/60 mt-8 py-10 px-4">
+  <div class="max-w-6xl mx-auto text-center space-y-2">
+    <p class="text-sm text-muted-foreground">
+      {t('footer.copyrightLine')}
+    </p>
+    <p class="text-xs text-muted-foreground/80">
+      {t('footer.madeWith')} <span class="text-primary-600 dark:text-primary-400">Astro</span>
+    </p>
+  </div>
+</footer>

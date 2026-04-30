@@ -2,9 +2,11 @@
 import '../styles/global.css';
 import { generateThemeCSS } from '@/config/theme';
 import { getLangFromUrl } from '@/i18n/utils';
+import { ViewTransitions } from 'astro:transitions';
 import CustomCursor from '@/components/CustomCursor.astro';
 import AnimatedBackground from '@/components/AnimatedBackground.astro';
 import ScrollToTop from '@/components/ScrollToTop.astro';
+import Footer from '@/components/Footer.astro';
 
 interface Props {
   title?: string;
@@ -27,6 +29,7 @@ const { lightVars, darkVars } = generateThemeCSS();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>{title}</title>
+    <ViewTransitions />
     <style is:global set:html={`
       :root {
         ${lightVars}
@@ -53,9 +56,7 @@ const { lightVars, darkVars } = generateThemeCSS();
         function setStoredTheme(theme) {
           try {
             localStorage.setItem('theme', theme);
-          } catch (e) {
-            throw new Error(e);
-          }
+          } catch (e) {}
         }
 
         const storedTheme = getStoredTheme();
@@ -63,15 +64,50 @@ const { lightVars, darkVars } = generateThemeCSS();
         const theme = storedTheme || (prefersDark ? 'dark' : 'light');
         if (theme === 'dark') {
           document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
         }
-        setStoredTheme(theme);
+        if (!storedTheme) {
+          setStoredTheme(theme);
+        }
       })();
     </script>
   </head>
   <body>
-    <AnimatedBackground />
-    <CustomCursor />
-    <ScrollToTop />
+    <div transition:persist="app-chrome">
+      <div id="vt-progress" class="vt-progress" aria-hidden="true">
+        <div id="vt-progress-bar" class="vt-progress-bar"></div>
+      </div>
+      <AnimatedBackground />
+      <CustomCursor />
+      <ScrollToTop />
+    </div>
     <slot />
+    <Footer lang={lang} />
+    <script is:inline>
+      (function () {
+        var bar = document.getElementById('vt-progress');
+        var inner = document.getElementById('vt-progress-bar');
+        if (!bar || !inner) return;
+        document.addEventListener('astro:before-preparation', function () {
+          bar.classList.remove('vt-progress--done');
+          bar.classList.add('vt-progress--active');
+        });
+        document.addEventListener('astro:after-swap', function () {
+          try {
+            var th = localStorage.getItem('theme');
+            if (th === 'dark') {
+              document.documentElement.classList.add('dark');
+            } else if (th === 'light') {
+              document.documentElement.classList.remove('dark');
+            }
+          } catch (e) {}
+          bar.classList.add('vt-progress--done');
+          window.setTimeout(function () {
+            bar.classList.remove('vt-progress--active', 'vt-progress--done');
+          }, 320);
+        });
+      })();
+    </script>
   </body>
 </html>
