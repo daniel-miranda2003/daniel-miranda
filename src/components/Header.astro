@@ -216,10 +216,18 @@ const cvPath = getCVPath(lang);
       link.addEventListener(
         'click',
         (e) => {
-          e.preventDefault();
-          const href = link.getAttribute('href')?.substring(1);
-          const target = document.getElementById(href || '');
+          const href = link.getAttribute('href');
+          const isHashLink = href?.startsWith('#');
+
           setMenuOpen(false);
+
+          if (!isHashLink) {
+            return;
+          }
+
+          e.preventDefault();
+          const targetId = href.substring(1);
+          const target = document.getElementById(targetId);
           if (target) {
             const headerOffset = 88;
             const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
