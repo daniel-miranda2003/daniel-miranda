@@ -7,7 +7,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "prepare": "husky",
     "lint": "astro check",
     "typecheck": "tsc --noEmit",
     "icons": "node scripts/generate-icons.mjs"
@@ -23,7 +22,6 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
     "husky": "^9.1.7",
     "lint-staged": "^17.2.0",
     "typescript": "^7.0.2"
