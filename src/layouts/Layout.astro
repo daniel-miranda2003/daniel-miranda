@@ -1,0 +1,232 @@
+---
+import '@/styles/global.css';
+import { generateThemeCSS } from '@/config/theme';
+import { getLangFromUrl } from '@/i18n/utils';
+import AmbientBackground from '@/components/AmbientBackground.astro';
+import ScrollToTop from '@/components/ScrollToTop.astro';
+import Footer from '@/components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const {
+  title = 'Portfolio',
+  description = 'Portfolio personal',
+  image = '/og-default.png',
+} = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const { lightVars, darkVars } = generateThemeCSS();
+
+const siteName = 'Daniel Miranda — Full Stack & Flutter Developer';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const imageURL = new URL(image, Astro.site).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#0891B2" />
+    <meta name="theme-color" content="#0891B2" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Daniel Miranda" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_BO' : 'en_US'} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    <meta name="twitter:creator" content="@danielmiranda" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Daniel Miranda",
+      "url": canonicalURL,
+      "jobTitle": "Full Stack & Flutter Developer",
+      "description": description,
+      "sameAs": [
+        "https://github.com/danielmiranda",
+        "https://linkedin.com/in/danielmiranda"
+      ]
+    })} />
+
+    <link rel="alternate" hreflang="es" href={new URL('/', Astro.site).href} />
+    <link rel="alternate" hreflang="en" href={new URL('/en/', Astro.site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+    <style is:global set:html={`
+      :root {
+        ${lightVars}
+      }
+      .dark {
+        ${darkVars}
+      }
+      body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+    `} />
+    <script is:inline>
+      (function() {
+        function getStoredTheme() {
+          try {
+            return localStorage.getItem('theme');
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function setStoredTheme(theme) {
+          try {
+            localStorage.setItem('theme', theme);
+          } catch (e) {}
+        }
+
+        const storedTheme = getStoredTheme();
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+
+        if (!storedTheme) {
+          setStoredTheme(theme);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div transition:persist="app-chrome">
+      <div id="vt-progress" class="vt-progress" aria-hidden="true">
+        <div id="vt-progress-bar" class="vt-progress-bar"></div>
+      </div>
+      <AmbientBackground />
+    </div>
+    <ScrollToTop />
+    <slot />
+    <Footer lang={lang} />
+    <script is:inline>
+      (function () {
+        var bar = document.getElementById('vt-progress');
+        var inner = document.getElementById('vt-progress-bar');
+        if (!bar || !inner) return;
+        document.addEventListener('astro:before-preparation', function () {
+          bar.classList.remove('vt-progress--done');
+          bar.classList.add('vt-progress--active');
+        });
+
+        document.addEventListener('astro:after-swap', function () {
+          try {
+            var th = localStorage.getItem('theme');
+            if (th === 'dark') {
+              document.documentElement.classList.add('dark');
+            } else if (th === 'light') {
+              document.documentElement.classList.remove('dark');
+            }
+          } catch (e) {}
+          bar.classList.add('vt-progress--done');
+          window.setTimeout(function () {
+            bar.classList.remove('vt-progress--active', 'vt-progress--done');
+          }, 320);
+        });
+      })();
+    </script>
+    <script is:inline>
+      (function() {
+        var el = document.getElementById('custom-cursor');
+        if (!el) return;
+        if (!window.matchMedia('(pointer: fine)').matches) { el.style.display = 'none'; return; }
+
+        var mx = -100, my = -100, dx = -100, dy = -100;
+
+        document.addEventListener('mousemove', function(e) {
+          mx = e.clientX; my = e.clientY;
+          el.style.opacity = '1';
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', function() { el.style.opacity = '0'; });
+
+        document.querySelectorAll('a, button, [role="button"], input, select, textarea, label').forEach(function(t) {
+          t.addEventListener('mouseenter', function() { el.classList.add('cursor-hover'); }, { passive: true });
+          t.addEventListener('mouseleave', function() { el.classList.remove('cursor-hover'); }, { passive: true });
+        });
+
+        document.addEventListener('mousedown', function() { el.classList.add('cursor-active'); }, { passive: true });
+        document.addEventListener('mouseup', function() { el.classList.remove('cursor-active'); }, { passive: true });
+
+        (function tick() {
+          dx += (mx - dx) * 0.18;
+          dy += (my - dy) * 0.18;
+          el.style.transform = 'translate3d(' + dx + 'px,' + dy + 'px,0)';
+          requestAnimationFrame(tick);
+        })();
+      })();
+    </script>
+    <script is:inline>
+      (function() {
+        var btn = document.getElementById('scroll-to-top');
+        if (!btn) return;
+        if (window.innerWidth < 768) { btn.style.display = 'none'; return; }
+
+        function check() {
+          var y = window.pageYOffset || document.documentElement.scrollTop;
+          if (y > 400) {
+            btn.style.opacity = '1';
+            btn.style.visibility = 'visible';
+            btn.style.transform = 'scale(1)';
+          } else {
+            btn.style.opacity = '0';
+            btn.style.visibility = 'hidden';
+            btn.style.transform = 'scale(0.95)';
+          }
+        }
+
+        window.addEventListener('scroll', check, { passive: true });
+        check();
+
+        btn.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function applyTheme() {
+          var isDark = document.documentElement.classList.contains('dark');
+          btn.style.background = isDark ? 'rgba(30,41,59,0.45)' : 'rgba(255,255,255,0.45)';
+          btn.style.borderColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.5)';
+          btn.style.boxShadow = isDark
+            ? '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08)'
+            : '0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6)';
+        }
+        applyTheme();
+        new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      })();
+    </script>
+  </body>
+</html>

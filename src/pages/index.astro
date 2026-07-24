@@ -1,0 +1,32 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Contact from '@/components/sections/Contact.astro';
+import Skills from '@/components/sections/Skills.astro';
+import SectionAnimations from '@/components/SectionAnimations.astro';
+import { fade } from 'astro:transitions';
+---
+<Layout
+  title="Daniel Miranda | Full Stack Developer & Flutter Developer"
+  description="Desarrollador Full Stack con Next.js, NestJS y Node.js. Construyo aplicaciones móviles y web escalables desde Bolivia."
+>
+  <div class="min-h-screen bg-background" transition:animate={fade({ duration: '0.32s' })}>
+    <Header />
+    <main class="container mx-auto px-4 max-w-6xl">
+      <section id="inicio" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:pt-28 md:pb-12 px-2">
+        <Hero lang="es" />
+      </section>
+      
+      <section id="habilidades" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
+          <Skills lang="es" />
+      </section>
+      
+      <section id="contacto" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
+          <Contact lang="es" />
+      </section>
+    </main>
+  </div>
+</Layout>
+
+<SectionAnimations />

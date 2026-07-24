@@ -1,0 +1,74 @@
+---
+---
+<button
+  id="scroll-to-top"
+  class="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full flex items-center justify-center"
+  aria-label="Volver arriba"
+  style="opacity:0; visibility:hidden; transform:scale(0.95); transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; backdrop-filter: blur(20px) saturate(165%); -webkit-backdrop-filter: blur(20px) saturate(165%); background: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6);"
+>
+  <svg class="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
+  </svg>
+</button>
+
+<div id="custom-cursor" aria-hidden="true">
+  <div class="cursor-ring"></div>
+  <div class="cursor-dot"></div>
+</div>
+
+<style>
+  #custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    opacity: 0;
+    display: none;
+    will-change: transform;
+  }
+  @media (pointer: fine) {
+    #custom-cursor { display: block; }
+  }
+
+  .cursor-ring {
+    position: absolute;
+    width: 36px; height: 36px;
+    margin: -18px 0 0 -18px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(34,211,238,0.4);
+    transition: all 0.3s ease;
+  }
+  .cursor-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: rgba(34,211,238,0.8);
+    box-shadow: 0 0 8px rgba(34,211,238,0.4);
+    transition: all 0.2s ease;
+  }
+  :global(.dark) .cursor-dot {
+    background: rgba(34,211,238,0.9);
+    box-shadow: 0 0 12px rgba(34,211,238,0.5);
+  }
+  .cursor-hover .cursor-ring {
+    width: 52px; height: 52px;
+    margin: -26px 0 0 -26px;
+    border-color: rgba(34,211,238,0.6);
+  }
+  .cursor-hover .cursor-dot {
+    width: 4px; height: 4px;
+    margin: -2px 0 0 -2px;
+    background: rgba(255,255,255,0.9);
+  }
+  .cursor-active .cursor-ring {
+    width: 28px; height: 28px;
+    margin: -14px 0 0 -14px;
+    border-color: rgba(34,211,238,0.8);
+  }
+  .cursor-active .cursor-dot {
+    width: 8px; height: 8px;
+    margin: -4px 0 0 -4px;
+  }
+</style>

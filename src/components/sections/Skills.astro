@@ -1,0 +1,63 @@
+---
+import { useTranslations } from '@/i18n/utils';
+import type { Language } from '@/config/i18n';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="habilidades">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-5xl md:text-6xl font-black mb-6 text-foreground">
+        {t('expertise.title')}
+      </h2>
+    </div>
+    <div class="space-y-6">
+      <div class="group">
+        <div class="relative lg-card p-8 md:p-10 transition-all duration-300">
+          <div class="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full bg-primary-400/15 dark:bg-primary-500/10 blur-3xl motion-safe:animate-pulse motion-safe:duration-[4s]"></div>
+          <div class="pointer-events-none absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-primary-300/10 dark:bg-primary-400/08 blur-3xl motion-safe:animate-pulse motion-safe:duration-[5s]"></div>
+          <div class="relative z-10 max-w-4xl space-y-5">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-primary-600 dark:text-primary-400">{t('expertise.focusLabel')}</p>
+            <h3 class="text-4xl md:text-5xl font-black text-foreground">
+              {t('expertise.fullstack')}
+            </h3>
+            <p class="text-base md:text-lg leading-relaxed text-muted-foreground">
+              {t('expertise.fullstackDescription')}
+            </p>
+            <div class="flex flex-wrap gap-2 pt-1">
+              {(t('expertise.fullstackTags') as string).split(',').map((tag: string) => (
+                <span class="text-xs px-3 py-1.5 rounded-lg lg-pill font-semibold text-foreground">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:items-stretch">
+        <div class="group flex">
+          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+            <div class="absolute top-8 right-6 w-28 h-28 bg-primary-400/10 dark:bg-primary-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.flutter')}</h3>
+            <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.flutterDescription')}</p>
+          </div>
+        </div>
+
+        <div class="group flex">
+          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+            <div class="absolute top-8 right-6 w-28 h-28 bg-secondary-500/08 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.apis')}</h3>
+            <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.apisDescription')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

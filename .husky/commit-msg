@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Conventional Commits linter (optional - uncomment to enable)
+# npx --no -- commitlint --edit "$1"

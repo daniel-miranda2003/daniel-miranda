@@ -1,0 +1,101 @@
+---
+---
+
+<script>
+  let sectionObserver: IntersectionObserver | null = null;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setupScrollAnimations() {
+    if (prefersReducedMotion) {
+      document.querySelectorAll('[data-animate="section"]').forEach((el) => {
+        el.classList.add('animate-section');
+      });
+      return;
+    }
+
+    if (sectionObserver) {
+      sectionObserver.disconnect();
+      sectionObserver = null;
+    }
+
+    const observerOptions: IntersectionObserverInit = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -80px 0px'
+    };
+
+    sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-section');
+          sectionObserver?.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('[data-animate="section"]').forEach((el) => {
+      sectionObserver?.observe(el);
+    });
+  }
+
+  setupScrollAnimations();
+  document.addEventListener('astro:page-load', setupScrollAnimations);
+</script>
+
+<style>
+  [data-animate="section"] {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-section {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  section[data-animate="section"]:nth-of-type(1) {
+    animation-delay: 0s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(2) {
+    animation-delay: 0.1s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(3) {
+    animation-delay: 0.2s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(4) {
+    animation-delay: 0.3s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(5) {
+    animation-delay: 0.4s;
+  }
+  
+  section[data-animate="section"]:nth-of-type(6) {
+    animation-delay: 0.5s;
+  }
+
+  [data-animate="section"] {
+    will-change: opacity, transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-animate="section"] {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+</style>
