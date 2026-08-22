@@ -1,7 +1,5 @@
 dist/
-
 .astro/
-
 node_modules/
 
 npm-debug.log*
@@ -15,19 +13,12 @@ pnpm-debug.log*
 
 .DS_Store
 
-.idea/
 .vscode/
 *.swp
 *.swo
 
 .vercel/
-
-.agents/
-.mimocode/
-src/data/
-
-coverage/
+.vercel
 
 *.log
 .DS_Store
-.vercel
