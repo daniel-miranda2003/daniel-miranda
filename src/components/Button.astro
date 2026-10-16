@@ -16,9 +16,9 @@ const {
 const baseClasses = 'button-base inline-flex items-center justify-center font-semibold rounded-full cursor-pointer';
 
 const sizeClasses = {
-  sm: 'py-2 px-5 text-sm',
-  md: 'py-3 px-7 text-base',
-  lg: 'py-3.5 px-9 text-lg',
+  sm: 'py-2 px-4 text-sm',
+  md: 'py-2.5 px-6 text-sm',
+  lg: 'py-3 px-7 text-base',
 };
 
 const Tag = href ? 'a' : 'button';
@@ -33,16 +33,20 @@ const Tag = href ? 'a' : 'button';
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .button-base:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
   }
 
   .button-primary {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-400));
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #262626, #161616);
+    color: #f7f7f7;
+    border: 1px solid rgba(255, 255, 255, 0.14);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.25),
-      0 8px 24px rgba(6, 182, 212, 0.25);
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 8px 24px rgba(0, 0, 0, 0.28);
   }
 
   .button-primary::before {
@@ -50,29 +54,31 @@ const Tag = href ? 'a' : 'button';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent 50%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 50%);
     pointer-events: none;
     z-index: -1;
   }
 
-  .button-primary:hover {
-    transform: translateY(-2px);
+  :global(.dark) .button-primary {
+    background: linear-gradient(135deg, #fafafa, #e2e2e2);
+    color: #161616;
+    border-color: rgba(0, 0, 0, 0.25);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      0 12px 32px rgba(6, 182, 212, 0.35);
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 8px 24px rgba(0, 0, 0, 0.55);
   }
 
-  .button-primary:active {
-    transform: translateY(0) scale(0.97);
+  :global(.dark) .button-primary::before {
+    background: linear-gradient(135deg, rgba(0,0,0,0.06), transparent 50%);
   }
 
   .button-secondary {
-    background: linear-gradient(135deg, var(--color-secondary-600), var(--color-secondary-400));
-    color: white;
+    background: linear-gradient(135deg, var(--color-secondary-600), var(--color-secondary-700));
+    color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      0 8px 24px rgba(100, 116, 139, 0.2);
+      0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   .button-secondary::before {
@@ -85,15 +91,13 @@ const Tag = href ? 'a' : 'button';
     z-index: -1;
   }
 
-  .button-secondary:hover {
-    transform: translateY(-2px);
+  :global(.dark) .button-secondary {
+    background: linear-gradient(135deg, #2e2e2e, #242424);
+    color: #ededed;
+    border-color: rgba(255, 255, 255, 0.12);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.25),
-      0 12px 32px rgba(100, 116, 139, 0.3);
-  }
-
-  .button-secondary:active {
-    transform: translateY(0) scale(0.97);
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 8px 24px rgba(0, 0, 0, 0.5);
   }
 
   .button-outline {
@@ -132,17 +136,5 @@ const Tag = href ? 'a' : 'button';
     border: 1px solid var(--lg-border-subtle);
     pointer-events: none;
     z-index: -1;
-  }
-
-  .button-outline:hover {
-    border-color: var(--lg-border);
-    box-shadow:
-      var(--lg-inset-rim),
-      var(--lg-shadow-lg);
-    transform: translateY(-2px);
-  }
-
-  .button-outline:active {
-    transform: translateY(0) scale(0.97);
   }
 </style>

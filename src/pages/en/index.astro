@@ -15,15 +15,15 @@ import { fade } from 'astro:transitions';
   <div class="min-h-screen bg-background" transition:animate={fade({ duration: '0.32s' })}>
     <Header />
     <main class="container mx-auto px-4 max-w-6xl">
-      <section id="inicio" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:pt-28 md:pb-12 px-2">
+      <section id="home" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 px-2">
         <Hero lang="en" />
       </section>
       
-      <section id="habilidades" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
+      <section id="skills" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
           <Skills lang="en" />
       </section>
       
-      <section id="contacto" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
+      <section id="contact" data-animate="section" class="min-h-[100dvh] flex items-center justify-center py-12 md:py-4">
           <Contact lang="en" />
       </section>
     </main>

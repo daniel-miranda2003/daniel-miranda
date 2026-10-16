@@ -5,6 +5,8 @@ import { getLangFromUrl } from '@/i18n/utils';
 import AmbientBackground from '@/components/AmbientBackground.astro';
 import ScrollToTop from '@/components/ScrollToTop.astro';
 import Footer from '@/components/Footer.astro';
+import jakartaSans from '@assets/fonts/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import specialGothic from '@assets/fonts/special-gothic-expanded-one-latin-400-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -34,13 +36,17 @@ const imageURL = new URL(image, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
+    <link rel="preload" href={jakartaSans} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={specialGothic} as="font" type="font/woff2" crossorigin />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="msapplication-TileColor" content="#0891B2" />
-    <meta name="theme-color" content="#0891B2" />
+    <meta name="msapplication-TileColor" content="#161616" />
+    <meta name="theme-color" content="#F4F4F4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E0E0E" media="(prefers-color-scheme: dark)" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -161,37 +167,6 @@ const imageURL = new URL(image, Astro.site).href;
     </script>
     <script is:inline>
       (function() {
-        var el = document.getElementById('custom-cursor');
-        if (!el) return;
-        if (!window.matchMedia('(pointer: fine)').matches) { el.style.display = 'none'; return; }
-
-        var mx = -100, my = -100, dx = -100, dy = -100;
-
-        document.addEventListener('mousemove', function(e) {
-          mx = e.clientX; my = e.clientY;
-          el.style.opacity = '1';
-        }, { passive: true });
-
-        document.addEventListener('mouseleave', function() { el.style.opacity = '0'; });
-
-        document.querySelectorAll('a, button, [role="button"], input, select, textarea, label').forEach(function(t) {
-          t.addEventListener('mouseenter', function() { el.classList.add('cursor-hover'); }, { passive: true });
-          t.addEventListener('mouseleave', function() { el.classList.remove('cursor-hover'); }, { passive: true });
-        });
-
-        document.addEventListener('mousedown', function() { el.classList.add('cursor-active'); }, { passive: true });
-        document.addEventListener('mouseup', function() { el.classList.remove('cursor-active'); }, { passive: true });
-
-        (function tick() {
-          dx += (mx - dx) * 0.18;
-          dy += (my - dy) * 0.18;
-          el.style.transform = 'translate3d(' + dx + 'px,' + dy + 'px,0)';
-          requestAnimationFrame(tick);
-        })();
-      })();
-    </script>
-    <script is:inline>
-      (function() {
         var btn = document.getElementById('scroll-to-top');
         if (!btn) return;
         if (window.innerWidth < 768) { btn.style.display = 'none'; return; }
@@ -201,11 +176,9 @@ const imageURL = new URL(image, Astro.site).href;
           if (y > 400) {
             btn.style.opacity = '1';
             btn.style.visibility = 'visible';
-            btn.style.transform = 'scale(1)';
           } else {
             btn.style.opacity = '0';
             btn.style.visibility = 'hidden';
-            btn.style.transform = 'scale(0.95)';
           }
         }
 
@@ -218,7 +191,7 @@ const imageURL = new URL(image, Astro.site).href;
 
         function applyTheme() {
           var isDark = document.documentElement.classList.contains('dark');
-          btn.style.background = isDark ? 'rgba(30,41,59,0.45)' : 'rgba(255,255,255,0.45)';
+          btn.style.background = isDark ? 'rgba(26,26,26,0.55)' : 'rgba(255,255,255,0.45)';
           btn.style.borderColor = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.5)';
           btn.style.boxShadow = isDark
             ? '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08)'

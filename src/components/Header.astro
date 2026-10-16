@@ -8,15 +8,15 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<header id="header" class="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 ease-out will-change-transform">
-  <nav id="desktop-nav" class="nav-glass-transition flex items-center gap-1 px-2 py-2 rounded-full whitespace-nowrap transition-all duration-500 ease-out">
-    <ul class="flex items-center gap-0.5">
-      <li><a href="#inicio" class="nav-link text-sm font-medium px-3 py-2 rounded-full transition-all whitespace-nowrap">{t('nav.home')}</a></li>
-      <li><a href="#habilidades" class="nav-link text-sm font-medium px-3 py-2 rounded-full transition-all whitespace-nowrap">{t('nav.skills')}</a></li>
-      <li><a href="#contacto" class="nav-link text-sm font-medium px-3 py-2 rounded-full transition-all whitespace-nowrap">{t('nav.contact')}</a></li>
+<header id="header" class="flex fixed top-6 left-1/2 -translate-x-1/2 z-[100]">
+  <nav id="desktop-nav" class="nav-glass-transition flex items-center gap-1 px-2 py-2 rounded-full whitespace-nowrap">
+    <ul class="hidden md:flex items-center gap-0.5">
+      <li><a href="#home" class="nav-link focus-ring text-sm font-medium px-3 py-2 rounded-full whitespace-nowrap">{t('nav.home')}</a></li>
+      <li><a href="#skills" class="nav-link focus-ring text-sm font-medium px-3 py-2 rounded-full whitespace-nowrap">{t('nav.skills')}</a></li>
+      <li><a href="#contact" class="nav-link focus-ring text-sm font-medium px-3 py-2 rounded-full whitespace-nowrap">{t('nav.contact')}</a></li>
     </ul>
 
-    <div class="nav-divider w-px h-5 mx-1.5 shrink-0 transition-all duration-500 ease-out"></div>
+    <div class="nav-divider hidden md:block w-px h-5 mx-1.5 shrink-0"></div>
 
     <div class="flex items-center gap-1 shrink-0">
       <ThemeToggle ariaLabel={t('theme.toggle')} />
@@ -25,36 +25,26 @@ const t = useTranslations(lang);
   </nav>
 </header>
 
-<div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[220]">
-  <nav id="mobile-nav" class="nav-glass-transition flex items-center gap-1 px-2 py-2 rounded-full transition-all duration-500 ease-out">
-    <a href="#inicio" class="mobile-tab inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors" aria-label={t('nav.home')}>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path>
-      </svg>
-    </a>
-    <a href="#habilidades" class="mobile-tab inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors" aria-label={t('nav.skills')}>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"></path>
-      </svg>
-    </a>
-    <a href="#contacto" class="mobile-tab inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors" aria-label={t('nav.contact')}>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"></path>
-      </svg>
-    </a>
-    <div class="w-px h-5 bg-white/20 dark:bg-white/10 mx-0.5"></div>
-    <ThemeToggle ariaLabel={t('theme.toggle')} />
-    <LanguageSwitcher />
-  </nav>
-</div>
-
 <script>
   let headerAbort: AbortController | null = null;
+
+  const HIDE_AFTER = 120;
+  const SCROLL_DELTA = 6;
+
+  let lastAnchor = 0;
+  let suppressUntil = 0;
+  let pendingHideAfterScroll = false;
+  let scrollIdleTimer = 0;
+
+  function setNavHidden(hidden: boolean) {
+    const el = document.getElementById('header');
+    if (!el) return;
+    el.classList.toggle('nav-hidden', hidden);
+  }
 
   function updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    const mobileTabs = document.querySelectorAll('.mobile-tab');
     let current = '';
 
     sections.forEach((section) => {
@@ -72,39 +62,66 @@ const t = useTranslations(lang);
         link.classList.remove('active');
       }
     });
-
-    mobileTabs.forEach((tab) => {
-      const href = tab.getAttribute('href')?.substring(1);
-      if (href === current) {
-        tab.classList.add('mobile-tab-active');
-      } else {
-        tab.classList.remove('mobile-tab-active');
-      }
-    });
   }
 
   function toggleGlassNav() {
     const desktopNav = document.getElementById('desktop-nav');
-    const mobileNav = document.getElementById('mobile-nav');
     const scrolled = window.scrollY > 80;
 
-    [desktopNav, mobileNav].forEach((nav) => {
-      if (!nav) return;
-      if (scrolled) {
-        nav.classList.add('nav-scrolled');
-      } else {
-        nav.classList.remove('nav-scrolled');
-      }
-    });
+    if (!desktopNav) return;
+    if (scrolled) {
+      desktopNav.classList.add('nav-scrolled');
+    } else {
+      desktopNav.classList.remove('nav-scrolled');
+    }
+  }
+
+  function updateNavVisibility() {
+    const y = Math.max(window.scrollY, 0);
+
+    if (Date.now() < suppressUntil || y <= HIDE_AFTER) {
+      setNavHidden(false);
+      lastAnchor = y;
+      return;
+    }
+
+    const diff = y - lastAnchor;
+    if (diff > SCROLL_DELTA) {
+      setNavHidden(true);
+      lastAnchor = y;
+    } else if (diff < -SCROLL_DELTA) {
+      setNavHidden(false);
+      lastAnchor = y;
+    }
+  }
+
+  // Once a programmatic scroll (nav click) settles, dismiss the nav
+  function onScrollIdle() {
+    if (!pendingHideAfterScroll) return;
+    pendingHideAfterScroll = false;
+    suppressUntil = 0;
+    setNavHidden(true);
   }
 
   function smoothScrollTo(targetId: string) {
     const target = document.getElementById(targetId);
     if (!target) return;
 
-    const isMobile = window.innerWidth < 768;
-    const offset = isMobile ? 100 : 80;
-    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    // Sections are full-viewport height (min-h-[100dvh]): align the section
+    // top with the viewport top so the entire section is visible at once.
+    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+
+    // Already there: dismiss the nav right away
+    if (Math.abs(window.pageYOffset - targetPosition) < 4) {
+      pendingHideAfterScroll = false;
+      setNavHidden(true);
+      return;
+    }
+
+    // Keep the nav visible while the smooth scroll runs, then hide it on arrival
+    suppressUntil = Date.now() + 2000;
+    pendingHideAfterScroll = true;
+    setNavHidden(false);
 
     window.scrollTo({
       top: targetPosition,
@@ -117,6 +134,11 @@ const t = useTranslations(lang);
     headerAbort = new AbortController();
     const signal = headerAbort.signal;
 
+    lastAnchor = Math.max(window.scrollY, 0);
+    pendingHideAfterScroll = false;
+    window.clearTimeout(scrollIdleTimer);
+    setNavHidden(false);
+
     toggleGlassNav();
     updateActiveLink();
 
@@ -125,8 +147,35 @@ const t = useTranslations(lang);
       () => {
         toggleGlassNav();
         updateActiveLink();
+        updateNavVisibility();
+
+        window.clearTimeout(scrollIdleTimer);
+        scrollIdleTimer = window.setTimeout(onScrollIdle, 140);
       },
       { passive: true, signal }
+    );
+
+    // Keep the nav reachable for keyboard users: reveal it on focus
+    const headerEl = document.getElementById('header');
+    headerEl?.addEventListener(
+      'focusin',
+      () => {
+        suppressUntil = Date.now() + 500;
+        setNavHidden(false);
+      },
+      { signal }
+    );
+
+    // Let other components (e.g. the hero CTA) drive a programmatic scroll:
+    // keep the nav visible while it runs, then dismiss it on arrival
+    window.addEventListener(
+      'nav:release',
+      () => {
+        suppressUntil = Date.now() + 2000;
+        pendingHideAfterScroll = true;
+        setNavHidden(false);
+      },
+      { signal }
     );
 
     // Desktop nav links
@@ -136,19 +185,6 @@ const t = useTranslations(lang);
         (e) => {
           e.preventDefault();
           const href = link.getAttribute('href')?.substring(1);
-          if (href) smoothScrollTo(href);
-        },
-        { signal }
-      );
-    });
-
-    // Mobile tab links
-    document.querySelectorAll('.mobile-tab').forEach((tab) => {
-      tab.addEventListener(
-        'click',
-        (e) => {
-          e.preventDefault();
-          const href = tab.getAttribute('href')?.substring(1);
           if (href) smoothScrollTo(href);
         },
         { signal }

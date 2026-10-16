@@ -13,110 +13,39 @@ const cvPath = getCVPath(lang);
 ---
 
 <section class="text-center px-2">
-  <p class="text-primary-600 dark:text-primary-400 font-medium mb-4 text-lg animate-fade-in">
+  <p class="text-primary-600 dark:text-primary-400 font-medium mb-4 text-sm md:text-base">
     {t('hero.greeting')}
   </p>
 
   <div class="mb-6">
-    <h2 class="text-5xl md:text-7xl font-bold text-primary-900 dark:text-primary-100">
-      <span id="typing-name" class="text-primary-900 dark:text-primary-100"></span>
-      <span
-        id="typing-role"
-        class="typing-role text-secondary-600 dark:text-secondary-400"
-        data-role={t('hero.subtitle')}
-      ></span>
-      <span class="typing-cursor">|</span>
+    <h2 class="text-4xl md:text-5xl tracking-tight text-primary-900 dark:text-primary-100">
+      Daniel Miranda
+      <span class="hero-role text-base md:text-lg font-medium text-secondary-600 dark:text-secondary-400">
+        {t('hero.subtitle')}
+      </span>
     </h2>
   </div>
 
-  <p class="text-lg text-secondary-700 dark:text-secondary-300 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
+  <p class="text-base text-secondary-700 dark:text-secondary-300 mb-10 max-w-2xl mx-auto leading-relaxed">
     {t('hero.description')}
   </p>
 
-  <div class="flex gap-4 justify-center flex-wrap animate-fade-in-delay-3">
-    <a href={cvPath} target="_blank" rel="noopener noreferrer">
+  <div class="flex gap-4 justify-center flex-wrap">
+    <a href="#contact" class="hero-scroll-link">
       <Button variant="primary" size="lg">
-        {t('nav.cv')}
+        {t('hero.contact')}
       </Button>
     </a>
-    <a href="#contacto" class="hero-scroll-link">
+    <a href={cvPath} target="_blank" rel="noopener noreferrer">
       <Button variant="outline" size="lg">
-        {t('hero.contact')}
+        {t('nav.cv')}
       </Button>
     </a>
   </div>
 </section>
 
 <script>
-  let heroRunId = 0;
-  const pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
   let scrollAbort: AbortController | null = null;
-
-  function clearHeroTimers() {
-    while (pendingTimeouts.length) {
-      const id = pendingTimeouts.pop();
-      if (id !== undefined) clearTimeout(id);
-    }
-  }
-
-  function schedule(ms: number, fn: () => void, run: number) {
-    const id = setTimeout(() => {
-      if (run !== heroRunId) return;
-      fn();
-    }, ms);
-    pendingTimeouts.push(id);
-  }
-
-  function initHeroTyping() {
-    heroRunId++;
-    const run = heroRunId;
-    clearHeroTimers();
-
-    const nameElement = document.getElementById('typing-name');
-    const roleElement = document.getElementById('typing-role');
-    const cursor = document.querySelector('.typing-cursor');
-
-    if (!nameElement || !roleElement) return;
-
-    nameElement.textContent = '';
-    roleElement.textContent = '';
-    roleElement.classList.remove('is-visible');
-    cursor?.classList.remove('cursor-stop');
-
-    const name = 'Daniel Miranda';
-    const role = roleElement.getAttribute('data-role') || '';
-
-    let nameIndex = 0;
-    let roleIndex = 0;
-
-    function typeName() {
-      if (run !== heroRunId) return;
-      if (nameIndex < name.length) {
-        nameElement.textContent += name.charAt(nameIndex);
-        nameIndex++;
-        schedule(Math.random() * 100 + 80, typeName, run);
-        return;
-      }
-      roleElement.classList.add('is-visible');
-      schedule(200, typeRole, run);
-    }
-
-    function typeRole() {
-      if (run !== heroRunId) return;
-      if (roleIndex < role.length) {
-        roleElement.textContent += role.charAt(roleIndex);
-        roleIndex++;
-        schedule(Math.random() * 50 + 45, typeRole, run);
-      } else {
-        schedule(500, () => {
-          if (run !== heroRunId) return;
-          cursor?.classList.add('cursor-stop');
-        }, run);
-      }
-    }
-
-    schedule(400, typeName, run);
-  }
 
   function initHeroScroll() {
     scrollAbort?.abort();
@@ -128,11 +57,11 @@ const cvPath = getCVPath(lang);
         'click',
         (e) => {
           e.preventDefault();
+          window.dispatchEvent(new Event('nav:release'));
           const href = link.getAttribute('href')?.substring(1);
           const target = document.getElementById(href || '');
           if (target) {
-            const headerOffset = 100;
-            const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+            const top = target.getBoundingClientRect().top + window.pageYOffset;
             window.scrollTo({ top, behavior: 'smooth' });
           }
         },
@@ -141,66 +70,11 @@ const cvPath = getCVPath(lang);
     });
   }
 
-  function initHero() {
-    initHeroTyping();
-    initHeroScroll();
-  }
-
-  document.addEventListener('astro:page-load', initHero);
-  document.addEventListener('DOMContentLoaded', initHero);
+  document.addEventListener('astro:page-load', initHeroScroll);
+  document.addEventListener('DOMContentLoaded', initHeroScroll);
 </script>
 
 <style>
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes blink {
-    0%,
-    49% {
-      opacity: 1;
-    }
-    50%,
-    100% {
-      opacity: 0;
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    opacity: 0;
-  }
-
-  .animate-fade-in-delay-2 {
-    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    animation-delay: 2.8s;
-    opacity: 0;
-  }
-
-  .animate-fade-in-delay-3 {
-    animation: fadeIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-    animation-delay: 3.3s;
-    opacity: 0;
-  }
-
-  .typing-cursor {
-    animation: blink 1s step-end infinite;
-    color: currentColor;
-    font-weight: 100;
-  }
-
-  .typing-cursor.cursor-stop {
-    animation: none;
-    opacity: 0;
-  }
-
   h2 {
     line-height: 1.2;
     display: flex;
@@ -210,15 +84,9 @@ const cvPath = getCVPath(lang);
     gap: 0.4rem;
   }
 
-  .typing-role {
-    min-height: 1.2em;
-    font-size: 0.42em;
-    font-weight: 600;
-    opacity: 0;
-  }
-
-  .typing-role.is-visible {
-    opacity: 1;
+  .hero-role {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
 
   @media (max-width: 768px) {

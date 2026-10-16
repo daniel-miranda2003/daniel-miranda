@@ -10,24 +10,24 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section id="habilidades" class="w-full min-w-0">
+<section class="w-full min-w-0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
-      <h2 class="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-foreground break-words">
+      <h2 class="text-3xl md:text-4xl tracking-tight mb-6 text-foreground break-words">
         {t('expertise.title')}
       </h2>
     </div>
     <div class="space-y-6">
-      <div class="group">
-        <div class="relative lg-card p-8 md:p-10 transition-all duration-300">
-          <div class="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full bg-primary-400/15 dark:bg-primary-500/10 blur-3xl motion-safe:animate-pulse motion-safe:duration-[4s]"></div>
-          <div class="pointer-events-none absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-primary-300/10 dark:bg-primary-400/08 blur-3xl motion-safe:animate-pulse motion-safe:duration-[5s]"></div>
+      <div>
+        <div class="relative lg-card p-8 md:p-10">
+          <div class="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full bg-primary-400/15 dark:bg-primary-500/10 blur-3xl"></div>
+          <div class="pointer-events-none absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-primary-300/10 dark:bg-primary-400/08 blur-3xl"></div>
           <div class="relative z-10 max-w-4xl space-y-5">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-primary-600 dark:text-primary-400">{t('expertise.focusLabel')}</p>
-            <h3 class="skill-title text-4xl md:text-5xl font-black text-foreground">
+            <p class="text-xs uppercase tracking-[0.14em] font-semibold text-primary-600 dark:text-primary-400">{t('expertise.focusLabel')}</p>
+            <h3 class="text-2xl md:text-3xl text-foreground">
               {t('expertise.fullstack')}
             </h3>
-            <p class="text-base md:text-lg leading-relaxed text-muted-foreground">
+            <p class="text-sm md:text-base leading-relaxed text-muted-foreground">
               {t('expertise.fullstackDescription')}
             </p>
             <div class="flex flex-wrap gap-2 pt-1">
@@ -42,18 +42,18 @@ const t = useTranslations(lang);
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:items-stretch">
-        <div class="group flex">
-          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+        <div class="flex">
+          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 overflow-hidden">
             <div class="absolute top-8 right-6 w-28 h-28 bg-primary-400/10 dark:bg-primary-500/10 rounded-full blur-2xl pointer-events-none"></div>
-            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.flutter')}</h3>
+            <h3 class="relative text-base font-semibold text-foreground mb-4">{t('expertise.flutter')}</h3>
             <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.flutterDescription')}</p>
           </div>
         </div>
 
-        <div class="group flex">
-          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 transition-all duration-300 overflow-hidden motion-safe:hover:-translate-y-0.5">
+        <div class="flex">
+          <div class="relative flex flex-col flex-1 lg-card p-7 pt-8 overflow-hidden">
             <div class="absolute top-8 right-6 w-28 h-28 bg-secondary-500/08 rounded-full blur-2xl pointer-events-none"></div>
-            <h3 class="relative text-xl font-bold text-foreground mb-4">{t('expertise.apis')}</h3>
+            <h3 class="relative text-base font-semibold text-foreground mb-4">{t('expertise.apis')}</h3>
             <p class="relative text-sm text-muted-foreground leading-relaxed flex-1">{t('expertise.apisDescription')}</p>
           </div>
         </div>
@@ -61,38 +61,3 @@ const t = useTranslations(lang);
     </div>
   </div>
 </section>
-
-<script>
-  function fitSkillTitles() {
-    const titles = document.querySelectorAll('.skill-title');
-    if (!titles.length) return;
-
-    const max = window.innerWidth >= 768 ? 48 : 36;
-    const min = 16;
-
-    titles.forEach((el) => {
-      const container = el.parentElement;
-      if (!container) return;
-      const containerWidth = container.clientWidth;
-
-      el.style.whiteSpace = 'nowrap';
-      el.style.fontSize = max + 'px';
-      const naturalWidth = el.scrollWidth;
-      el.style.whiteSpace = '';
-
-      el.style.fontSize =
-        naturalWidth > containerWidth
-          ? Math.max(min, Math.floor((max * containerWidth) / naturalWidth)) + 'px'
-          : max + 'px';
-    });
-  }
-
-  function initSkillTitles() {
-    requestAnimationFrame(fitSkillTitles);
-  }
-
-  document.addEventListener('astro:page-load', initSkillTitles);
-  document.addEventListener('DOMContentLoaded', initSkillTitles);
-  window.addEventListener('resize', () => requestAnimationFrame(fitSkillTitles));
-  if (document.fonts?.ready) document.fonts.ready.then(fitSkillTitles);
-</script>
